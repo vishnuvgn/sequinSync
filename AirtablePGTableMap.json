@@ -1,13 +1,20 @@
 {
     "Members": "Members",
-    "Sample Documents": "SampleDocuments",
-    "Rifle": "Rifle",
-    "M249": "M249",
-    "M16": "M16",
-    "Grenade": "Grenade",
-    "240B": "240B",
-    "Aircraft Equipment": "AircraftEquipment",
+    "Requirements": "Requirements",
+    "Squadrons": "Squadrons",
+    "Groups": "Groups",
+    "AppointmentType": "Appointmenttype",
+    "Rifle Training": "RifleTraining",
+    "M249 Training": "M249Training",
+    "M4 Training": "M4Training",
+    "Grenade Training": "GrenadeTraining",
+    "M240 Training": "M240Training",
+    "Roles": "Roles",
+    "Jobs": "Jobs",
     "Vehicle Equipment": "VehicleEquipment",
+    "Maintenance Equipment": "MaintenanceEquipment",
     "Communications Equipment": "CommunicationsEquipment",
-    "Maintenance Equipment": "MaintenanceEquipment"
+    "Aircraft Equipment": "AircraftEquipment",
+    "Slots": "Slots",
+    "Skills": "Skills"
 }

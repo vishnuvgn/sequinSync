@@ -22,8 +22,9 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
             
             if pgFieldName[-2:] == "Fk":
 # NOTE: SUPER IMPORTANT -- the foreign key referece field MUST 
-# contain the EXACT spelling of the table it references (case insensitive)
-# I am NOT doing any error checking for this. This just needs to be done right in airtable.
+# contain the EXACT spelling of the table it references I am NOT doing any error
+# checking for this. This just needs to be done right in airtable.
+           
             # -3 because there will be an undersore btw the table title and the letters Fk
                 fkReferenceTable = formatName.changeName(field[:-3], False) 
                 createFKRelation(pgTable, pgFieldName, fkReferenceTable)

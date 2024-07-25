@@ -1,6 +1,7 @@
 {
     "Members": [
         "Name",
+        "recordId_pk",
         "DODID",
         "Home Phone",
         "SSN",
@@ -8,86 +9,99 @@
         "Date Arrived at Station (DAS)",
         "Age",
         "Personal Email",
-        "Home Address",
         "Military Email",
+        "Home Address",
         "Gender",
         "Personal Tagline",
+        "JobTitle",
         "aws s3 link",
+        "Complete Glide Member URL",
+        "hasConflict",
+        "Roles_fk",
+        "Jobs_fk",
+        "Groups_fk",
+        "Squadrons_fk"
+    ],
+    "Requirements": [
+        "Requirements",
+        "recordId_pk",
+        "Members_fk",
+        "AppointmentType_fk",
         "Status",
-        "Rifle CXN",
-        "M249 CXN",
-        "M16 CXN",
-        "Grenade CXN",
-        "240B CXN"
+        "isBooked"
     ],
-    "Sample Documents": [
-        "Sample Documents Id",
-        "Document Type",
-        "Memo Title",
-        "Author Description",
-        "Target Audience",
-        "Category",
-        "Topic",
-        "Accuracy Seed",
-        "Formatted Created Date & Time",
-        "Sentiment",
-        "Clean Note"
+    "Squadrons": [
+        "Squadron",
+        "recordId_pk",
+        "Supervisor Name",
+        "Squadron Readiness Status",
+        "Image URL",
+        "Groups_fk",
+        "icon"
     ],
-    "Rifle": [
-        "Members CXN String",
-        "Requirement",
-        "Last Completion Date",
-        "Days Since Completion",
-        "Status",
-        "Qualification Expiration Date"
+    "Groups": [
+        "Group",
+        "recordId_pk",
+        "Supervisor Name",
+        "Group Readiness Score",
+        "Group Readiness Status",
+        "Image URL",
+        "icon"
     ],
-    "M249": [
-        "Members CXN String",
-        "Requirement",
-        "Last Completion Date",
-        "Days Since Completion",
-        "Status",
-        "Qualification Expiration Date"
-    ],
-    "M16": [
-        "Members CXN String",
-        "Requirement",
-        "Last Completion Date",
-        "Days Since Completion",
-        "Status",
-        "Qualification Expiration Date"
-    ],
-    "Grenade": [
-        "Members CXN String",
-        "Requirement",
-        "Last Completion Date",
-        "Days Since Completion",
-        "Status",
-        "Qualification Expiration Date"
-    ],
-    "240B": [
-        "Members CXN String",
-        "Requirement",
-        "Last Completion Date",
-        "Days Since Completion",
-        "Status",
-        "Qualification Expiration Date"
-    ],
-    "Aircraft Equipment": [
-        "Aircraft Equipment Id",
+    "AppointmentType": [
         "Name",
+        "recordId_pk",
+        "Duration Minutes"
+    ],
+    "Rifle Training": [
+        "Member",
+        "recordId_pk",
+        "Completed Date",
+        "Expiration Date",
+        "Status"
+    ],
+    "M249 Training": [
+        "Member",
+        "recordId_pk",
+        "Completed Date",
+        "Expiration Date",
+        "Status"
+    ],
+    "M4 Training": [
+        "Member",
+        "recordId_pk",
+        "Completed Date",
+        "Expiration Date",
+        "Status"
+    ],
+    "Grenade Training": [
+        "Member",
+        "recordId_pk",
+        "Completed Date",
+        "Expiration Date",
+        "Status"
+    ],
+    "M240 Training": [
+        "Member",
+        "recordId_pk",
+        "Completed Date",
+        "Expiration Date",
+        "Status"
+    ],
+    "Roles": [
+        "Role Title",
+        "recordId_pk",
+        "Role Description"
+    ],
+    "Jobs": [
+        "Job Title",
+        "recordId_pk",
         "Description",
-        "Model",
-        "Manufacturer",
-        "Serial Number",
-        "Acquisition Date",
-        "Condition",
-        "Last Maintenance Date",
-        "Next Maintenance Date"
+        "Squadrons_fk"
     ],
     "Vehicle Equipment": [
-        "Vehicle Equipment Id",
         "Name",
+        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -97,9 +111,9 @@
         "Last Maintenance Date",
         "Next Maintenance Date"
     ],
-    "Communications Equipment": [
-        "Communications Equipment Id",
+    "Maintenance Equipment": [
         "Name",
+        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -109,9 +123,9 @@
         "Last Maintenance Date",
         "Next Maintenance Date"
     ],
-    "Maintenance Equipment": [
-        "Maintenance Equipment Id",
+    "Communications Equipment": [
         "Name",
+        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -120,5 +134,34 @@
         "Condition",
         "Last Maintenance Date",
         "Next Maintenance Date"
+    ],
+    "Aircraft Equipment": [
+        "Name",
+        "recordId_pk",
+        "Description",
+        "Model",
+        "Manufacturer",
+        "Serial Number",
+        "Acquisition Date",
+        "Condition",
+        "Last Maintenance Date",
+        "Next Maintenance Date"
+    ],
+    "Slots": [
+        "Slot ID",
+        "recordId_pk",
+        "Start Time",
+        "End Time",
+        "SlotCapacity",
+        "SlotUsed",
+        "isBooked",
+        "AppointmentType_fk",
+        "Members_fk"
+    ],
+    "Skills": [
+        "Skill",
+        "recordId_pk",
+        "Source",
+        "Type"
     ]
 }
