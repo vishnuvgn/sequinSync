@@ -1,0 +1,124 @@
+{
+    "Members": [
+        "Name",
+        "DODID",
+        "Home Phone",
+        "SSN",
+        "Date of Birth",
+        "Date Arrived at Station (DAS)",
+        "Age",
+        "Personal Email",
+        "Home Address",
+        "Military Email",
+        "Gender",
+        "Personal Tagline",
+        "aws s3 link",
+        "Status",
+        "Rifle CXN",
+        "M249 CXN",
+        "M16 CXN",
+        "Grenade CXN",
+        "240B CXN"
+    ],
+    "Sample Documents": [
+        "Sample Documents Id",
+        "Document Type",
+        "Memo Title",
+        "Author Description",
+        "Target Audience",
+        "Category",
+        "Topic",
+        "Accuracy Seed",
+        "Formatted Created Date & Time",
+        "Sentiment",
+        "Clean Note"
+    ],
+    "Rifle": [
+        "Members CXN String",
+        "Requirement",
+        "Last Completion Date",
+        "Days Since Completion",
+        "Status",
+        "Qualification Expiration Date"
+    ],
+    "M249": [
+        "Members CXN String",
+        "Requirement",
+        "Last Completion Date",
+        "Days Since Completion",
+        "Status",
+        "Qualification Expiration Date"
+    ],
+    "M16": [
+        "Members CXN String",
+        "Requirement",
+        "Last Completion Date",
+        "Days Since Completion",
+        "Status",
+        "Qualification Expiration Date"
+    ],
+    "Grenade": [
+        "Members CXN String",
+        "Requirement",
+        "Last Completion Date",
+        "Days Since Completion",
+        "Status",
+        "Qualification Expiration Date"
+    ],
+    "240B": [
+        "Members CXN String",
+        "Requirement",
+        "Last Completion Date",
+        "Days Since Completion",
+        "Status",
+        "Qualification Expiration Date"
+    ],
+    "Aircraft Equipment": [
+        "Aircraft Equipment Id",
+        "Name",
+        "Description",
+        "Model",
+        "Manufacturer",
+        "Serial Number",
+        "Acquisition Date",
+        "Condition",
+        "Last Maintenance Date",
+        "Next Maintenance Date"
+    ],
+    "Vehicle Equipment": [
+        "Vehicle Equipment Id",
+        "Name",
+        "Description",
+        "Model",
+        "Manufacturer",
+        "SerialNumber",
+        "Acquisition Date",
+        "Condition",
+        "Last Maintenance Date",
+        "Next Maintenance Date"
+    ],
+    "Communications Equipment": [
+        "Communications Equipment Id",
+        "Name",
+        "Description",
+        "Model",
+        "Manufacturer",
+        "Serial Number",
+        "Acquisition Date",
+        "Condition",
+        "Last Maintenance Date",
+        "Next Maintenance Date"
+    ],
+    "Maintenance Equipment": [
+        "Maintenance Equipment Id",
+        "Name",
+        "Description",
+        "Model",
+        "Manufacturer",
+        "Serial Number",
+        "Acquisition Date",
+        "Condition",
+        "Last Maintenance Date",
+        "Next Maintenance Date"
+    ]
+}

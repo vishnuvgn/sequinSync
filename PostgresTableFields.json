@@ -1,0 +1,124 @@
+{
+    "Members": [
+        "name",
+        "dodid",
+        "homePhone",
+        "ssn",
+        "dateOfBirth",
+        "dateArrivedAtStation",
+        "age",
+        "personalEmail",
+        "homeAddress",
+        "militaryEmail",
+        "gender",
+        "personalTagline",
+        "awsS3Link",
+        "status",
+        "rifleCxn",
+        "m249Cxn",
+        "m16Cxn",
+        "grenadeCxn",
+        "240BCxn"
+    ],
+    "SampleDocuments": [
+        "sampleDocumentsId",
+        "documentType",
+        "memoTitle",
+        "authorDescription",
+        "targetAudience",
+        "category",
+        "topic",
+        "accuracySeed",
+        "formattedCreatedDate&Time",
+        "sentiment",
+        "cleanNote"
+    ],
+    "Rifle": [
+        "membersCxnString",
+        "requirement",
+        "lastCompletionDate",
+        "daysSinceCompletion",
+        "status",
+        "qualificationExpirationDate"
+    ],
+    "M249": [
+        "membersCxnString",
+        "requirement",
+        "lastCompletionDate",
+        "daysSinceCompletion",
+        "status",
+        "qualificationExpirationDate"
+    ],
+    "M16": [
+        "membersCxnString",
+        "requirement",
+        "lastCompletionDate",
+        "daysSinceCompletion",
+        "status",
+        "qualificationExpirationDate"
+    ],
+    "Grenade": [
+        "membersCxnString",
+        "requirement",
+        "lastCompletionDate",
+        "daysSinceCompletion",
+        "status",
+        "qualificationExpirationDate"
+    ],
+    "240B": [
+        "membersCxnString",
+        "requirement",
+        "lastCompletionDate",
+        "daysSinceCompletion",
+        "status",
+        "qualificationExpirationDate"
+    ],
+    "AircraftEquipment": [
+        "aircraftEquipmentId",
+        "name",
+        "description",
+        "model",
+        "manufacturer",
+        "serialNumber",
+        "acquisitionDate",
+        "condition",
+        "lastMaintenanceDate",
+        "nextMaintenanceDate"
+    ],
+    "VehicleEquipment": [
+        "vehicleEquipmentId",
+        "name",
+        "description",
+        "model",
+        "manufacturer",
+        "serialnumber",
+        "acquisitionDate",
+        "condition",
+        "lastMaintenanceDate",
+        "nextMaintenanceDate"
+    ],
+    "CommunicationsEquipment": [
+        "communicationsEquipmentId",
+        "name",
+        "description",
+        "model",
+        "manufacturer",
+        "serialNumber",
+        "acquisitionDate",
+        "condition",
+        "lastMaintenanceDate",
+        "nextMaintenanceDate"
+    ],
+    "MaintenanceEquipment": [
+        "maintenanceEquipmentId",
+        "name",
+        "description",
+        "model",
+        "manufacturer",
+        "serialNumber",
+        "acquisitionDate",
+        "condition",
+        "lastMaintenanceDate",
+        "nextMaintenanceDate"
+    ]
+}
