@@ -86,31 +86,43 @@ fields and tables are surrounded by double quotes to preserve case sensitivity i
 '''
 def writeQuery(table):
     
-    columnsQuery = '(upstream_id, updated_idx'
+    # columnsQuery = '(upstream_id, updated_idx'
     numOfFields = len(PG_TABLE_FIELDS[table])
-
+    
+    columnsQuery = '('
+    placeholders = '('
+    
     for i in range(numOfFields):
         field = PG_TABLE_FIELDS[table][i]
         if i == numOfFields - 1: # last field
             columnsQuery += f', "{field}")'
+            placeholders += '%s)'
+        elif i == 0: # first field
+            columnsQuery += f'"{field}"'
+            placeholders += '%s, '
         else:
             columnsQuery += f', "{field}"'
-
-    numOfCols = numOfFields + 2 # plus two because of upstream_id and updated_idx
-
-    placeholders = '('
-    for i in range(numOfCols):
-        if i == numOfCols - 1: # last col
-            placeholders += '%s)'
-        else:
             placeholders += '%s, '
+
+    # numOfCols = numOfFields + 2 # plus two because of upstream_id and updated_idx
+
+    
+    # for i in range(numOfFields):
+    #     if i == numOfFields - 1: # last col
+    #         placeholders += '%s)'
+    #     else:
+    #         placeholders += '%s, '
 
 
     # fieldnames / excluded query
-    excludedQuery = '"updated_idx" = excluded."updated_idx"'
+    excludedQuery = ''
     for i in range(numOfFields):
         field = PG_TABLE_FIELDS[table][i]
-        excludedQuery += f', "{field}" = excluded."{field}"'
+        if field != "upstream_id":
+            if i == 0:
+                excludedQuery += f'"{field}" = excluded."{field}"'
+            else:
+                excludedQuery += f', "{field}" = excluded."{field}"'
         
 
     # Prepare the SQL query
@@ -237,15 +249,15 @@ def createTables():
     tablesQueue = sortTables(foreignKeyCountMap)
     tablesEntered = set()
     while len(tablesQueue) != 0:
-        print(f'tablesEntered = {tablesEntered}')
+        # print(f'tablesEntered = {tablesEntered}')
         tbl = tablesQueue.pop(0) # deque
-        print(tbl)
+        # print(tbl)
         # print(f'table = {tbl}')
         if tbl in PG_FOREIGN_KEYS: # if there are foreign keys
             boolFlag = True
             for foreignField in PG_FOREIGN_KEYS[tbl].keys():
                 refTable = foreignField[:-3].upper()
-                print(f'refTable = {refTable}')
+                # print(f'refTable = {refTable}')
 
                 if refTable not in tablesEntered:
                     boolFlag = False
