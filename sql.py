@@ -84,24 +84,25 @@ input: string
 output: string
 fields and tables are surrounded by double quotes to preserve case sensitivity in pgdb
 '''
-def writeQuery(table):
+def writeQuery(table, cols):
     
     # columnsQuery = '(upstream_id, updated_idx'
-    numOfFields = len(PG_TABLE_FIELDS[table])
+    # numOfFields = len(PG_TABLE_FIELDS[table])
     
     columnsQuery = '('
     placeholders = '('
-    
+    numOfFields = len(cols)
     for i in range(numOfFields):
-        field = PG_TABLE_FIELDS[table][i]
+        # field = PG_TABLE_FIELDS[table][i]
+        col = cols[i]
         if i == numOfFields - 1: # last field
-            columnsQuery += f', "{field}")'
+            columnsQuery += f', "{col}")'
             placeholders += '%s)'
         elif i == 0: # first field
-            columnsQuery += f'"{field}"'
+            columnsQuery += f'"{col}"'
             placeholders += '%s, '
         else:
-            columnsQuery += f', "{field}"'
+            columnsQuery += f', "{col}"'
             placeholders += '%s, '
 
     # numOfCols = numOfFields + 2 # plus two because of upstream_id and updated_idx
@@ -116,14 +117,16 @@ def writeQuery(table):
 
     # fieldnames / excluded query
     excludedQuery = ''
+    first = True
+
     for i in range(numOfFields):
-        field = PG_TABLE_FIELDS[table][i]
-        if field != "upstream_id":
-            if i == 0:
-                excludedQuery += f'"{field}" = excluded."{field}"'
-            else:
-                excludedQuery += f', "{field}" = excluded."{field}"'
-        
+        col = cols[i]
+        if col != "upstream_id":
+            if not first:
+                excludedQuery += ', '
+            excludedQuery += f'"{col}" = excluded."{col}"'
+            first = False
+            
 
     # Prepare the SQL query
     query = '''
@@ -316,6 +319,11 @@ def deleteTables():
         return "aborted"
 
 def clearTables():
+
     tbls = list(PG_TABLE_FIELDS.keys())
     for tbl in tbls:
         clearTable(tbl)
+
+def restart():
+    deleteTables()
+    createTables()

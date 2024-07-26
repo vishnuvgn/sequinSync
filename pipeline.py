@@ -1,4 +1,4 @@
-import airtables, sql
+import airtables, sql, formatName
 
 import time
 import logging
@@ -54,40 +54,69 @@ def upsert_record(record):
     # look up fields are always sent as individual json objects in list : (['a', 'b', ['rec...']])
     # have to extract the actual text from the one element list
     # fields = [upstream_id, updated_idx]
-    fields = []
-    for field in airtableFields:
-        if field in record["data"]["fields"]:
-            # print(field)
-            # print(record["data"]["fields"])
+    # fields = []
+    # for field in airtableFields:
+    #     if field in record["data"]["fields"]:
+    #         # print(field)
+    #         # print(record["data"]["fields"])
 
-            if type(record["data"]["fields"][field]) == list and len(record["data"]["fields"][field]) == 1:
-                fields.append(record["data"]["fields"][field][0])
-            # psycopg2 doesn't like dictionaries --> the only dictionary passed in right now is an error message. Have to think about this a bit more if we will ever pass a dict.
-            elif type(record["data"]["fields"][field]) == dict:
-                print(record["data"]["fields"][field])
-                print(f'dict: {field}')
+    #         if type(record["data"]["fields"][field]) == list and len(record["data"]["fields"][field]) == 1:
+    #             fields.append(record["data"]["fields"][field][0])
+    #         # psycopg2 doesn't like dictionaries --> the only dictionary passed in right now is an error message. Have to think about this a bit more if we will ever pass a dict.
+    #         elif type(record["data"]["fields"][field]) == dict:
+    #             print(record["data"]["fields"][field])
+    #             print(f'dict: {field}')
 
-                with open("error.txt", "w") as f:
-                    f.write(f'error {field}: {record["data"]["fields"][field]}')
+    #             with open("error.txt", "w") as f:
+    #                 f.write(f'error {field}: {record["data"]["fields"][field]}')
 
-                fields.append("")
+    #             fields.append("")
 
-            else:
-                fields.append(record["data"]["fields"][field])
+    #         else:
+    #             fields.append(record["data"]["fields"][field])
         
-    # print(f'fields = {fields}')
-    fields.append(upstream_id)
-    fields.append(updated_idx)
+    fieldsSent = record["data"]["fields"].keys()
+    # print(fieldsSent)
+    PGCols = ["upstream_id", "updated_idx"]
+    values = (upstream_id, updated_idx)
+    for field in fieldsSent:
+        # print(f'field = {field}')
+        if field in airtableFields:
+
+            value = record["data"]["fields"][field]
+            if type(value) == list and len(value) == 1:
+                value = value[0]
+            elif type(value) == dict:
+                with open("error.txt", "w") as f:
+                    f.write(f'error {field}: {value}')
+                value = ""
+            values += (value, )
+
+            
+            PGField = formatName.changeName(field, True)
+            # print(f'PGField = {PGField}')
+            PGCols.append(PGField)
+            
+    # print(f'PGCols = {PGCols}')
+    # print(f'values = {values}')
+    
+    query = sql.writeQuery(sqlTable, PGCols)
+    # print(query)
+
+
+    # # print(f'fields = {fields}')
+    # fields.append(upstream_id)
+    # fields.append(updated_idx)
 
 
     
-    query = sql.writeQuery(sqlTable)
+    # query = sql.writeQuery(sqlTable)
     # print(f'query = {query}')
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
 
     # Execute the query with the record data
-    cur.execute(query, tuple(fields))
+    cur.execute(query, values)
 
     # Commit the transaction
     conn.commit()
