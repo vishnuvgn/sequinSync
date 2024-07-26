@@ -141,6 +141,38 @@ def createTable(table):
     cur.close()
     conn.close()
 
+def createJunctionTable(table1, table2):
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
+
+    table1_pk = formatName.changeName(table1, False)  # Primary key for table1
+    table2_pk = formatName.changeName(table2, False)  # Primary key for table2
+
+    junction_table_name = f"{table1}_{table2}"
+
+    query = f'''
+    CREATE TABLE IF NOT EXISTS "{junction_table_name}" (
+        "{table1_pk}" TEXT,
+        "{table2_pk}" TEXT,
+        PRIMARY KEY ("{table1_pk}", "{table2_pk}"),
+        FOREIGN KEY ("{table1_pk}") REFERENCES "{table1}"("recordid_Pk") ON DELETE CASCADE,
+        FOREIGN KEY ("{table2_pk}") REFERENCES "{table2}"("recordid_Pk") ON DELETE CASCADE
+    );
+    '''
+    
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+    cur.execute(query)
+    print(f'created {table1}{table2}')
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 # be fucking careful
 def deleteTable(table):
     conn = psycopg2.connect(
