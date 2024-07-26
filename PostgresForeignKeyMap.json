@@ -1,0 +1,22 @@
+{
+    "Members": {
+        "roles_Fk": "\"Roles\"(\"recordid_Pk\")",
+        "jobs_Fk": "\"Jobs\"(\"recordid_Pk\")",
+        "groups_Fk": "\"Groups\"(\"recordid_Pk\")",
+        "squadrons_Fk": "\"Squadrons\"(\"recordid_Pk\")"
+    },
+    "Requirements": {
+        "members_Fk": "\"Members\"(\"recordid_Pk\")",
+        "appointmenttype_Fk": "\"Appointmenttype\"(\"recordid_Pk\")"
+    },
+    "Squadrons": {
+        "groups_Fk": "\"Groups\"(\"recordid_Pk\")"
+    },
+    "Jobs": {
+        "squadrons_Fk": "\"Squadrons\"(\"recordid_Pk\")"
+    },
+    "Slots": {
+        "appointmenttype_Fk": "\"Appointmenttype\"(\"recordid_Pk\")",
+        "members_Fk": "\"Members\"(\"recordid_Pk\")"
+    }
+}

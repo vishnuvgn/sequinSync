@@ -11,6 +11,7 @@ PG_PASSWORD=os.getenv('PG_PASSWORD')
 PG_SCHEMA=os.getenv('PG_SCHEMA')
 
 def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS): 
+    foreignKeyMap = {} 
     at_pg_map = {}
     pg_table_fields = {}
     for airTable, airFields in tables.items():
@@ -27,7 +28,7 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
            
             # -3 because there will be an undersore btw the table title and the letters Fk
                 fkReferenceTable = formatName.changeName(field[:-3], False) 
-                createFKRelation(pgTable, pgFieldName, fkReferenceTable)
+                createFKRelation(foreignKeyMap, pgTable, pgFieldName, fkReferenceTable)
 
             pgFields.append(pgFieldName)
         
@@ -42,21 +43,21 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
 
     jsonFunctions.overwrite_json("AirtablePGTableMap.json", at_pg_map) # airtable to pg table
     jsonFunctions.overwrite_json("PostgresTableFields.json", pg_table_fields)
+    jsonFunctions.overwrite_json("PostgresForeignKeyMap.json", foreignKeyMap)
+
 
 PG_TABLE_FIELDS = json.load(open("PostgresTableFields.json"))
-
 AIRTABLE_TO_SQL_MAP = json.load(open("AirtablePGTableMap.json"))
-
-PG_FOREIGN_KEYS = {}
+PG_FOREIGN_KEYS = json.load(open("PostgresForeignKeyMap.json"))
 
 # fkTable: Represents the table that contains the foreign key.
 # fkField: Represents the foreign key field in the table.
 # fkReferenceTable: Represents the table that the foreign key references.
-def createFKRelation(fkTable, fkField, fkReferenceTable):
-    if fkTable not in PG_FOREIGN_KEYS:
-        PG_FOREIGN_KEYS[fkTable] = {fkField : f'{fkReferenceTable}("recordid_Pk")'}
+def createFKRelation(fkDict, fkTable, fkField, fkReferenceTable):
+    if fkTable not in fkDict:
+        fkDict[fkTable] = {fkField : f'"{fkReferenceTable}"("recordid_Pk")'}
     else:
-        PG_FOREIGN_KEYS[fkTable][fkField] = f'{fkReferenceTable}("recordid_Pk")'
+        fkDict[fkTable][fkField] = f'"{fkReferenceTable}"("recordid_Pk")'
      
 
 '''
@@ -129,17 +130,26 @@ def createTable(table):
     # query += ');'
 
     query = f'CREATE TABLE IF NOT EXISTS "{table}" ('
-    for field in PG_TABLE_FIELDS[table]:
+    
+    for i in range(len(PG_TABLE_FIELDS[table])):
+        print(i)
+        field = PG_TABLE_FIELDS[table][i]
         
-        # if the last two letters of the field is Pk, then it is a primary key
+        print(table, i, field) 
+        
+        prefix = ", "
+        if i == 0:
+            prefix = ""
+    
+    # if the last two letters of the field is Pk, then it is a primary key
         if field[-2:] == "Pk":
-            query += f', "{field}" TEXT PRIMARY KEY'
+            query += f'{prefix}"{field}" TEXT PRIMARY KEY'
         
         elif field == "updated_idx":
-            query += f', "{field}" BIGINT'
+            query += f'{prefix}"{field}" BIGINT'
 
         else:
-            query += f', "{field}" TEXT'
+            query += f'{prefix}"{field}" TEXT'
     
     query += ');'
     
@@ -151,32 +161,25 @@ def createTable(table):
 
 
 
-
-
 # be fucking careful
 def deleteTable(table):
     
-    print(f'DB: {PG_DATABASE}')
-    validation = input("Are you sure this is the database you want to clear (Y/n): ")
-    if validation == "y" or validation == "Y":
-        conn = psycopg2.connect(
-            host=PG_HOST,
-            database=PG_DATABASE,
-            user=PG_USER,
-            password=PG_PASSWORD
-        )
-        cur = conn.cursor()
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
 
-        query = f'DROP TABLE IF EXISTS "{table}"'
-        
-        cur.execute(f"SET search_path TO {PG_SCHEMA}")
-        cur.execute(query)
-        conn.commit()
-        cur.close()
-        conn.close()
-    else:
-        return "aborted"
-
+    query = f'DROP TABLE IF EXISTS "{table}"'
+    
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+    cur.execute(query)
+    conn.commit()
+    cur.close()
+    conn.close()
+    
 def clearTable(table):
     conn = psycopg2.connect(
         host=PG_HOST,
@@ -199,29 +202,37 @@ def createTables():
     for tbl in tbls:
         createTable(tbl)
 
-
-
-
-# def linkTables():
-#     conn = psycopg2.connect(
-#             host=PG_HOST,
-#             database=PG_DATABASE,
-#             user=PG_USER,
-#             password=PG_PASSWORD
-#         )
-#     cur = conn.cursor()
-
-#     tbls = list(PG_TABLE_FIELDS.keys())
-#     for tbl in tbls:
-
-
-
+def linkTables():
+    conn = psycopg2.connect(
+            host=PG_HOST,
+            database=PG_DATABASE,
+            user=PG_USER,
+            password=PG_PASSWORD
+        )
+    cur = conn.cursor()
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+    for tbl in PG_FOREIGN_KEYS:
+        for field, reference in PG_FOREIGN_KEYS[tbl].items():
+            constraintName = tbl+"_"+field
+            # print(f'constraintName = {constraintName}')
+            query = f'ALTER TABLE "{tbl}" ADD CONSTRAINT {constraintName} FOREIGN KEY ("{field}") REFERENCES {reference};'
+            # print(query)
+            cur.execute(query)
+    
+    conn.commit()
+    cur.close()
+    conn.close()
         
-
 def deleteTables():
-    tbls = list(PG_TABLE_FIELDS.keys())
-    for tbl in tbls:
-        deleteTable(tbl)
+    print(f'DB: {PG_DATABASE}')
+    validation = input("Are you sure this is the database you want to clear (Y/n): ")
+    if validation == "y" or validation == "Y":
+
+        tbls = list(PG_TABLE_FIELDS.keys())
+        for tbl in tbls:
+            deleteTable(tbl)
+    else:
+        return "aborted"
 
 def clearTables():
     tbls = list(PG_TABLE_FIELDS.keys())
