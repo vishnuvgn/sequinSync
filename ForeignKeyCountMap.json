@@ -1,0 +1,28 @@
+{
+    "4": [
+        "Members"
+    ],
+    "2": [
+        "Requirements",
+        "Slots"
+    ],
+    "1": [
+        "Squadrons",
+        "Jobs"
+    ],
+    "0": [
+        "Groups",
+        "Appointmenttype",
+        "RifleTraining",
+        "M249Training",
+        "M4Training",
+        "GrenadeTraining",
+        "M240Training",
+        "Roles",
+        "VehicleEquipment",
+        "MaintenanceEquipment",
+        "CommunicationsEquipment",
+        "AircraftEquipment",
+        "Skills"
+    ]
+}

@@ -11,12 +11,14 @@ PG_PASSWORD=os.getenv('PG_PASSWORD')
 PG_SCHEMA=os.getenv('PG_SCHEMA')
 
 def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS): 
+    foreignKeyCountMap = {} # dictionary of tables with the same number of foreign keys ex: {1: [table1, table2, table3], 2: [table4, table5]}
     foreignKeyMap = {} 
     at_pg_map = {}
     pg_table_fields = {}
     for airTable, airFields in tables.items():
         pgFields = []
         pgTable = formatName.changeName(airTable, False)
+        fkCount = 0
         for field in airFields:
 
             pgFieldName = formatName.changeName(field, True)
@@ -30,7 +32,15 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
                 fkReferenceTable = formatName.changeName(field[:-3], False) 
                 createFKRelation(foreignKeyMap, pgTable, pgFieldName, fkReferenceTable)
 
+                # count how many foreign keys there are
+                fkCount += 1
+
             pgFields.append(pgFieldName)
+        
+        if fkCount in foreignKeyCountMap:
+            foreignKeyCountMap[fkCount].append(pgTable)
+        else:
+            foreignKeyCountMap[fkCount] = [pgTable]
         
         at_pg_map[airTable] = pgTable
         pg_table_fields[pgTable] = pgFields
@@ -44,6 +54,7 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
     jsonFunctions.overwrite_json("AirtablePGTableMap.json", at_pg_map) # airtable to pg table
     jsonFunctions.overwrite_json("PostgresTableFields.json", pg_table_fields)
     jsonFunctions.overwrite_json("PostgresForeignKeyMap.json", foreignKeyMap)
+    jsonFunctions.overwrite_json("ForeignKeyCountMap.json", foreignKeyCountMap)
 
 
 PG_TABLE_FIELDS = json.load(open("PostgresTableFields.json"))
@@ -59,6 +70,14 @@ def createFKRelation(fkDict, fkTable, fkField, fkReferenceTable):
     else:
         fkDict[fkTable][fkField] = f'"{fkReferenceTable}"("recordid_Pk")'
      
+# with parameter because expecting to use it in a pipeline.py
+def sortTables(foreignKeyCountMap):
+    sortedTables = []
+    for count in sorted(foreignKeyCountMap.keys()):
+        sortedTables += foreignKeyCountMap[count]
+    return sortedTables
+
+
 
 '''
 input: string
@@ -125,7 +144,11 @@ def createTable(table):
     # if the last two letters of the field is Pk, then it is a primary key
         if field[-2:] == "Pk":
             query += f'{prefix}"{field}" TEXT PRIMARY KEY'
-        
+
+        elif field[-2:] == "Fk":
+            query += f'{prefix}"{field}" TEXT, '
+            query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
+
         elif field == "updated_idx":
             query += f'{prefix}"{field}" BIGINT'
 
@@ -210,10 +233,42 @@ def clearTable(table):
     conn.close()
 
 def createTables():
-    tbls = list(PG_TABLE_FIELDS.keys())
-    for tbl in tbls:
-        createTable(tbl)
+    foreignKeyCountMap = json.load(open("ForeignKeyCountMap.json"))
+    tablesQueue = sortTables(foreignKeyCountMap)
+    tablesEntered = set()
+    while len(tablesQueue) != 0:
+        print(f'tablesEntered = {tablesEntered}')
+        tbl = tablesQueue.pop(0) # deque
+        print(tbl)
+        # print(f'table = {tbl}')
+        if tbl in PG_FOREIGN_KEYS: # if there are foreign keys
+            boolFlag = True
+            for foreignField in PG_FOREIGN_KEYS[tbl].keys():
+                refTable = foreignField[:-3].upper()
+                print(f'refTable = {refTable}')
 
+                if refTable not in tablesEntered:
+                    boolFlag = False
+                    break
+            if boolFlag == True:
+                createTable(tbl)
+                tablesEntered.add(tbl.upper())
+            else:
+                tablesQueue.append(tbl)
+                    
+        
+        else: # if there are no foreign keys
+            createTable(tbl)
+            tablesEntered.add(tbl.upper())
+
+
+
+    # tbls = list(PG_TABLE_FIELDS.keys())
+    # for tbl in tbls:
+    #     createTable(tbl)
+
+
+# not necessary anymore because of my queue algorithm, but nice to have
 def linkTables():
     conn = psycopg2.connect(
             host=PG_HOST,
