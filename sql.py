@@ -54,7 +54,8 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
         # if i already put them in the json, i don't have to add them again
         
         # will always be the name of the table formatted as a field + _id
-        pgTablePk = formatName.changeName(pgTable, True) + "_id" # upstream_id value here
+        
+        pgTablePk = formatName.createPrimaryKey(pgTable)
         pg_table_fields[pgTable].append(pgTablePk)
         pg_table_fields[pgTable].append("updated_idx")
 
@@ -73,8 +74,7 @@ PG_FOREIGN_KEYS = json.load(open("PostgresForeignKeyMap.json"))
 # fkField: Represents the foreign key field in the table.
 # fkReferenceTable: Represents the table that the foreign key references.
 def createFKRelation(fkDict, fkTable, fkField, fkReferenceTable):
-    pkOfReference = formatName.changeName(fkReferenceTable, True) + "_id" # upstream_id renamed to ex: members_id
-
+    pkOfReference = formatName.createPrimaryKey(fkReferenceTable)
     if fkTable not in fkDict:
         fkDict[fkTable] = {fkField : f'"{fkReferenceTable}"("{pkOfReference}")'}
     else:
@@ -95,7 +95,7 @@ output: string
 fields and tables are surrounded by double quotes to preserve case sensitivity in pgdb
 '''
 def writeQuery(table, cols):
-    pgTablePk = formatName.changeName(table, True) + "_id"
+    pgTablePk = formatName.createPrimaryKey(table)
     columnsQuery = '('
     placeholders = '('
     numOfFields = len(cols)
@@ -148,7 +148,7 @@ def createTable(table):
     
     for i in range(len(PG_TABLE_FIELDS[table])):
         field = PG_TABLE_FIELDS[table][i]
-        pgTablePk = formatName.changeName(table, True) + "_id"
+        pgTablePk = formatName.createPrimaryKey(table)
         prefix = ", "
         if i == 0:
             prefix = ""
@@ -189,10 +189,10 @@ def createJunctionTable(table1, table2):
     cur = conn.cursor()
 
     
-    table1_pk = formatName.changeName(table1, True) + "_id" # Primary key for table1
-    table2_pk = formatName.changeName(table2, True) + "_id" # Primary key for table2
+    table1_pk = formatName.createPrimaryKey(table1)
+    table2_pk = formatName.createPrimaryKey(table2)
 
-    junction_table_name = f"{table1}_{table2}"
+    junction_table_name = formatName.createJunctionTableName(table1, table2)
 
     
     query = f'''
@@ -207,7 +207,7 @@ def createJunctionTable(table1, table2):
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
     cur.execute(query)
-    print(f'created {table1}_{table2}')
+    print(f'created {junction_table_name}')
     conn.commit()
     cur.close()
     conn.close()
@@ -220,12 +220,14 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
         password=PG_PASSWORD
     )
     cur = conn.cursor()
-    junction_table_name = f"{table1}_{table2}"
-        
+    junction_table_name = formatName.createJunctionTableName(table1, table2)
+    table1_pk = formatName.createPrimaryKey(table1)
+    table2_pk = formatName.createPrimaryKey(table2)
+
     for table2Id in table2Ids:
 
         query = f'''
-        INSERT INTO "{junction_table_name}" ("{table1Id}", "{table2Id}")
+        INSERT INTO "{junction_table_name}" ("{table1_pk}", "{table2_pk}")
         VALUES ('{table1Id}', '{table2Id}')
         '''
         

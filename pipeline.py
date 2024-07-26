@@ -53,10 +53,10 @@ def upsert_record(record):
     
     # keys of the mapping table have to be the records expected in the sync
     airtableTable = airtables.TABLE_SEQUIN_SYNC_IDS[record["collection_id"]] 
-    if airtableTable == "Squadrons":
-        print("Squadrons")
-        with open("error.txt", "w") as f:
-            f.write(f'Squadrons: {record}')
+    # if airtableTable == "Squadrons":
+    #     print("Squadrons")
+    #     with open("error.txt", "w") as f:
+    #         f.write(f'Squadrons: {record}')
     # print(airtableTable)
     sqlTable = sql.AIRTABLE_TO_SQL_MAP[airtableTable]
     
@@ -154,7 +154,6 @@ def run():
                 global M2M_POPULATED
                 if M2M_POPULATED == False:
                     # junctionTables is the tuple key for the dict
-                    global M2M_MAPS
                     for junctionTables, recordMap in M2M_MAPS.items():
                         # tbl1Id is the upstream_id of the record in the main table
                         # tbl2Ids is a list of upstream_ids of the records in the ref table

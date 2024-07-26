@@ -19,3 +19,9 @@ def changeName(input_string, isField: bool):
 
     
     return input_string
+
+def createJunctionTableName(table1, table2):
+    return f'{table1}_{table2}'
+
+def createPrimaryKey(table):
+    return f'{changeName(table, True)}_id'
