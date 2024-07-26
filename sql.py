@@ -286,6 +286,70 @@ def createTables():
         createTable(tbl)
 
 
+def alterPKs():
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+
+    for tbl in PG_TABLE_FIELDS.keys():
+        try:
+            # Check if the column exists
+            cur.execute(f"""
+                SELECT column_name 
+                FROM information_schema.columns 
+                WHERE table_schema = '{PG_SCHEMA}' 
+                AND table_name = '{tbl}' 
+                AND column_name = 'recordid_Pk'
+            """)
+            column_exists = cur.fetchone()
+            if not column_exists:
+                print(f"Column 'recordid_Pk' does not exist in table '{tbl}'. Skipping.")
+                continue
+
+            # Find the existing primary key constraint name
+            cur.execute(f"""
+                SELECT constraint_name 
+                FROM information_schema.table_constraints 
+                WHERE table_schema = '{PG_SCHEMA}' 
+                AND table_name = '{tbl}' 
+                AND constraint_type = 'PRIMARY KEY'
+            """)
+            pk_constraint = cur.fetchone()
+            print(f"Primary key constraint for table {tbl}: {pk_constraint}")
+
+            if pk_constraint:
+                pk_constraint = pk_constraint[0]
+                # Drop the existing primary key constraint
+                drop_query = f'ALTER TABLE "{tbl}" DROP CONSTRAINT "{pk_constraint}"'
+                print(f"Executing: {drop_query}")
+                cur.execute(drop_query)
+                conn.commit()
+                print(f"Dropped primary key constraint '{pk_constraint}' from table '{tbl}'.")
+
+            # Add the new primary key constraint
+            add_pk_query = f'ALTER TABLE "{tbl}" ADD PRIMARY KEY ("recordid_Pk")'
+            print(f"Executing: {add_pk_query}")
+            cur.execute(add_pk_query)
+            conn.commit()
+            print(f"Added new primary key 'recordid_Pk' to table '{tbl}'.")
+
+        except Exception as e:
+            print(f"Error modifying primary key for table {tbl}: {e}")
+            conn.rollback()
+        else:
+            conn.commit()
+
+    cur.close()
+    conn.close()
+
+
+
+
 def linkTables():
     conn = psycopg2.connect(
             host=PG_HOST,
