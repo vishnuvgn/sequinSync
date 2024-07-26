@@ -151,7 +151,7 @@ def run():
             # If there are no more messages to pull, wait for 5 seconds before trying again
             if not has_more(info):
                 logging.info("No more messages to pull")#, sleeping for 5 seconds")
-                global M2M_POPULATED
+                global M2M_POPULATED, WAIT
                 if M2M_POPULATED == False and WAIT >= 15:
                     # junctionTables is the tuple key for the dict
                     for junctionTables, recordMap in M2M_MAPS.items():
@@ -163,7 +163,6 @@ def run():
                             sql.populateJunctionTable(tbl1, tbl2, tbl1Id, tbl2Ids)
                     M2M_POPULATED = True
                 else:
-                    global WAIT
                     WAIT += 1
                     logging.info("sleeping for 5 seconds")
 
