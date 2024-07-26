@@ -39,7 +39,7 @@ cur = conn.cursor()
 
 M2M_MAPS = {}
 M2M_POPULATED = False
-
+WAIT = 0
 
 
 
@@ -152,7 +152,7 @@ def run():
             if not has_more(info):
                 logging.info("No more messages to pull")#, sleeping for 5 seconds")
                 global M2M_POPULATED
-                if M2M_POPULATED == False:
+                if M2M_POPULATED == False and WAIT >= 15:
                     # junctionTables is the tuple key for the dict
                     for junctionTables, recordMap in M2M_MAPS.items():
                         # tbl1Id is the upstream_id of the record in the main table
@@ -163,6 +163,8 @@ def run():
                             sql.populateJunctionTable(tbl1, tbl2, tbl1Id, tbl2Ids)
                     M2M_POPULATED = True
                 else:
+                    global WAIT
+                    WAIT += 1
                     logging.info("sleeping for 5 seconds")
 
                 time.sleep(5)
