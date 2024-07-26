@@ -36,8 +36,7 @@
         "Supervisor Name",
         "Squadron Readiness Status",
         "Image URL",
-        "Groups_fk",
-        "icon"
+        "Groups_fk"
     ],
     "Groups": [
         "Group",
@@ -45,8 +44,7 @@
         "Supervisor Name",
         "Group Readiness Score",
         "Group Readiness Status",
-        "Image URL",
-        "icon"
+        "Image URL"
     ],
     "AppointmentType": [
         "Name",

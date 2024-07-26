@@ -155,14 +155,17 @@ def createTable(table):
     
     # if the last two letters of the field is Pk, then it is a primary key
         if field[-2:] == "Pk":
-            query += f'{prefix}"{field}" TEXT PRIMARY KEY'
+            query += f'{prefix}"{field}" TEXT'# PRIMARY KEY'
 
-        elif field[-2:] == "Fk":
-            query += f'{prefix}"{field}" TEXT, '
-            query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
+        # elif field[-2:] == "Fk":
+        #     query += f'{prefix}"{field}" TEXT, '
+        #     query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
 
         elif field == "updated_idx":
             query += f'{prefix}"{field}" BIGINT'
+
+        elif field == "upstream_id":
+            query += f'{prefix}"{field}" TEXT PRIMARY KEY'
 
         else:
             query += f'{prefix}"{field}" TEXT'
@@ -245,42 +248,41 @@ def clearTable(table):
     conn.close()
 
 def createTables():
-    foreignKeyCountMap = json.load(open("ForeignKeyCountMap.json"))
-    tablesQueue = sortTables(foreignKeyCountMap)
-    tablesEntered = set()
-    while len(tablesQueue) != 0:
-        # print(f'tablesEntered = {tablesEntered}')
-        tbl = tablesQueue.pop(0) # deque
-        # print(tbl)
-        # print(f'table = {tbl}')
-        if tbl in PG_FOREIGN_KEYS: # if there are foreign keys
-            boolFlag = True
-            for foreignField in PG_FOREIGN_KEYS[tbl].keys():
-                refTable = foreignField[:-3].upper()
-                # print(f'refTable = {refTable}')
+    # foreignKeyCountMap = json.load(open("ForeignKeyCountMap.json"))
+    # tablesQueue = sortTables(foreignKeyCountMap)
+    # tablesEntered = set()
+    # while len(tablesQueue) != 0:
+    #     # print(f'tablesEntered = {tablesEntered}')
+    #     tbl = tablesQueue.pop(0) # deque
+    #     # print(tbl)
+    #     # print(f'table = {tbl}')
+    #     if tbl in PG_FOREIGN_KEYS: # if there are foreign keys
+    #         boolFlag = True
+    #         for foreignField in PG_FOREIGN_KEYS[tbl].keys():
+    #             refTable = foreignField[:-3].upper()
+    #             # print(f'refTable = {refTable}')
 
-                if refTable not in tablesEntered:
-                    boolFlag = False
-                    break
-            if boolFlag == True:
-                createTable(tbl)
-                tablesEntered.add(tbl.upper())
-            else:
-                tablesQueue.append(tbl)
+    #             if refTable not in tablesEntered:
+    #                 boolFlag = False
+    #                 break
+    #         if boolFlag == True:
+    #             createTable(tbl)
+    #             tablesEntered.add(tbl.upper())
+    #         else:
+    #             tablesQueue.append(tbl)
                     
         
-        else: # if there are no foreign keys
-            createTable(tbl)
-            tablesEntered.add(tbl.upper())
+    #     else: # if there are no foreign keys
+    #         createTable(tbl)
+    #         tablesEntered.add(tbl.upper())
 
 
 
-    # tbls = list(PG_TABLE_FIELDS.keys())
-    # for tbl in tbls:
-    #     createTable(tbl)
+    tbls = list(PG_TABLE_FIELDS.keys())
+    for tbl in tbls:
+        createTable(tbl)
 
 
-# not necessary anymore because of my queue algorithm, but nice to have
 def linkTables():
     conn = psycopg2.connect(
             host=PG_HOST,

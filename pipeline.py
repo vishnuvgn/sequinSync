@@ -31,6 +31,7 @@ conn = psycopg2.connect(
 cur = conn.cursor()
 
 def upsert_record(record):
+    # print(record)
     
     # think more about the implication of this "ignore" logic
     # was a short term fix but could be a potential solution
@@ -52,26 +53,33 @@ def upsert_record(record):
     
     # look up fields are always sent as individual json objects in list : (['a', 'b', ['rec...']])
     # have to extract the actual text from the one element list
-    fields = [upstream_id, updated_idx]
+    # fields = [upstream_id, updated_idx]
+    fields = []
     for field in airtableFields:
         if field in record["data"]["fields"]:
+            # print(field)
+            # print(record["data"]["fields"])
+
             if type(record["data"]["fields"][field]) == list and len(record["data"]["fields"][field]) == 1:
                 fields.append(record["data"]["fields"][field][0])
             # psycopg2 doesn't like dictionaries --> the only dictionary passed in right now is an error message. Have to think about this a bit more if we will ever pass a dict.
             elif type(record["data"]["fields"][field]) == dict:
+                print(record["data"]["fields"][field])
+                print(f'dict: {field}')
+
+                with open("error.txt", "w") as f:
+                    f.write(f'error {field}: {record["data"]["fields"][field]}')
+
                 fields.append("")
 
             else:
                 fields.append(record["data"]["fields"][field])
-        else:
-            fields.append("")
-    
+        
     # print(f'fields = {fields}')
+    fields.append(upstream_id)
+    fields.append(updated_idx)
 
 
-
-
-    
     
     query = sql.writeQuery(sqlTable)
     # print(f'query = {query}')

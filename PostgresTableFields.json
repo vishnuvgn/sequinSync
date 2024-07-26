@@ -41,7 +41,6 @@
         "squadronReadinessStatus",
         "imageUrl",
         "groups_Fk",
-        "icon",
         "upstream_id",
         "updated_idx"
     ],
@@ -52,7 +51,6 @@
         "groupReadinessScore",
         "groupReadinessStatus",
         "imageUrl",
-        "icon",
         "upstream_id",
         "updated_idx"
     ],

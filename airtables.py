@@ -2,19 +2,28 @@ import extractFields, jsonFunctions
 import os, json
 
 
-# TABLE_SEQUIN_SYNC_IDS = {
-#     "airtable:eujMtBaNfSAsMvI2kF7F2nSi": "Members",
-#     "airtable:7fKt3PavD0TmBIZVOz5YHUEL": "Sample Documents",
-#     "airtable:EbxuQyg8nltoV4AaWf4ZzoFY": "Rifle",
-#     "airtable:NkmWXvTPqbybAkcE4IGm0dn6": "M249",
-#     "airtable:G4imjysVDOOH5ofUbCWwXryx": "M16",
-#     "airtable:f4eki9HRwU2imQWdDnFJV7rS": "Grenade",
-#     "airtable:Zj1i1yilXiqXjgJfTOtq3BdD": "240B",
-#     "airtable:eHqBtzxb7xC1pYcfrcZf3j1G" : "Aircraft Equipment",
-#     "airtable:2szPY7DQDWxpueAyU4JT8OWQ" : "Vehicle Equipment",
-#     "airtable:dVa6dpvaGo9saVuXuN3hrjxJ" : "Communications Equipment",
-#     "airtable:gcSyR6LfxbXo7iART4m1vcLu" : "Maintenance Equipment" 
-# }
+TABLE_SEQUIN_SYNC_IDS = {
+    "airtable:2szPY7DQDWxpueAyU4JT8OWQ": "Vehicle Equipment",
+    "airtable:3X4IbiTRF9f03YjZakTicWEV": "Squadrons",
+    "airtable:6su7Wmk9nQYYgiYtDZ82LXgi": "Roles",
+    "airtable:EbxuQyg8nltoV4AaWf4ZzoFY": "Rifle Training",
+    "airtable:G4imjysVDOOH5ofUbCWwXryx": "M4 Training",
+    "airtable:K71pCFJE5gmXYnNf81eBCJKa": "Requirements",
+    "airtable:NiSyJM9Od17YXRObYJwlzWr2": "Skills",
+    "airtable:NkmWXvTPqbybAkcE4IGm0dn6": "M249 Training",
+    "airtable:NpJbSblRDdKgJosRbZSBCtve": "AppointmentType",
+    "airtable:QRjRBK74dypRkjVNxSMSac29": "Slots",
+    "airtable:Zj1i1yilXiqXjgJfTOtq3BdD": "M240 Training",
+    "airtable:dVa6dpvaGo9saVuXuN3hrjxJ": "Communications Equipment",
+    "airtable:eHqBtzxb7xC1pYcfrcZf3j1G": "Aircraft Equipment",
+    "airtable:eujMtBaNfSAsMvI2kF7F2nSi": "Members",
+    "airtable:f4eki9HRwU2imQWdDnFJV7rS": "Grenade Training",
+    "airtable:gcSyR6LfxbXo7iART4m1vcLu": "Maintenance Equipment",
+    "airtable:s9lQTLDSVZeTxaLOD5KU8jAP": "Jobs",
+    "airtable:uG2YwEsUrEFVKk5KC4VnN8gh": "Groups"
+}
+
+
 
 
 '''
