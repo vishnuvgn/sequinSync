@@ -114,29 +114,10 @@ def createTable(table):
     )
     cur = conn.cursor()
 
-    # column1 = "upstream_id" # primary key
-    # column2 = "updated_idx"
-    
-    # qPrefix = f'''
-    #     CREATE TABLE IF NOT EXISTS "{table}" (
-    #         "{column1}" TEXT PRIMARY KEY,
-    #         "{column2}" BIGINT'''
-    
-    # query = qPrefix
-
-    # for field in PG_TABLE_FIELDS[table]:
-    #     query += f', "{field}" TEXT'
-    
-    # query += ');'
-
     query = f'CREATE TABLE IF NOT EXISTS "{table}" ('
     
     for i in range(len(PG_TABLE_FIELDS[table])):
-        print(i)
         field = PG_TABLE_FIELDS[table][i]
-        
-        print(table, i, field) 
-        
         prefix = ", "
         if i == 0:
             prefix = ""
@@ -155,15 +136,13 @@ def createTable(table):
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
     cur.execute(query)
+    print(f'created {table}')
     conn.commit()
     cur.close()
     conn.close()
 
-
-
 # be fucking careful
 def deleteTable(table):
-    
     conn = psycopg2.connect(
         host=PG_HOST,
         database=PG_DATABASE,
@@ -172,13 +151,14 @@ def deleteTable(table):
     )
     cur = conn.cursor()
 
-    query = f'DROP TABLE IF EXISTS "{table}"'
+    query = f'DROP TABLE IF EXISTS "{table}" CASCADE'
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
     cur.execute(query)
     conn.commit()
     cur.close()
     conn.close()
+    print(f'deleted {table}') 
     
 def clearTable(table):
     conn = psycopg2.connect(
