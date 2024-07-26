@@ -30,7 +30,6 @@ conn = psycopg2.connect(
 # Create a cursor object
 cur = conn.cursor()
 
-# these will be upstream ids. only 1:1 relations will need to have the distinction btw upstream_id and recordid_Pk. otherwise they are the same.
 # TODO: will write explanation. this is important
 # {
 #     (memberTable, skillTable) :{
@@ -69,7 +68,10 @@ def upsert_record(record):
 
     fieldsSent = record["data"]["fields"].keys()
     # print(fieldsSent)
-    PGCols = ["upstream_id", "updated_idx"]
+
+    pgTablePk = formatName.changeName(sqlTable, True) + "_id" # upstream_id val will go here
+    PGCols = [pgTablePk, "updated_idx"]
+
     values = (upstream_id, updated_idx)
     for field in fieldsSent:
         # print(f'field = {field}')
@@ -89,6 +91,8 @@ def upsert_record(record):
                     }
                 else:
                     M2M_MAPS[junctionTables][upstream_id] = value
+
+                print(value)
 
                 
             if type(value) == list and len(value) == 1:
@@ -147,9 +151,10 @@ def run():
             # If there are no more messages to pull, wait for 5 seconds before trying again
             if not has_more(info):
                 logging.info("No more messages to pull")#, sleeping for 5 seconds")
-
+                global M2M_POPULATED
                 if M2M_POPULATED == False:
                     # junctionTables is the tuple key for the dict
+                    global M2M_MAPS
                     for junctionTables, recordMap in M2M_MAPS.items():
                         # tbl1Id is the upstream_id of the record in the main table
                         # tbl2Ids is a list of upstream_ids of the records in the ref table

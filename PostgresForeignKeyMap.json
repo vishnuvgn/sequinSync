@@ -1,22 +1,37 @@
 {
     "Members": {
-        "roles_Fk": "\"Roles\"(\"recordid_Pk\")",
-        "jobs_Fk": "\"Jobs\"(\"recordid_Pk\")",
-        "groups_Fk": "\"Groups\"(\"recordid_Pk\")",
-        "squadrons_Fk": "\"Squadrons\"(\"recordid_Pk\")"
+        "roles_Fk": "\"Roles\"(\"roles_id\")",
+        "jobs_Fk": "\"Jobs\"(\"jobs_id\")",
+        "groups_Fk": "\"Groups\"(\"groups_id\")",
+        "squadrons_Fk": "\"Squadrons\"(\"squadrons_id\")"
     },
     "Requirements": {
-        "members_Fk": "\"Members\"(\"recordid_Pk\")",
-        "appointmenttype_Fk": "\"Appointmenttype\"(\"recordid_Pk\")"
+        "members_Fk": "\"Members\"(\"members_id\")",
+        "appointmenttype_Fk": "\"Appointmenttype\"(\"appointmenttype_id\")"
     },
     "Squadrons": {
-        "groups_Fk": "\"Groups\"(\"recordid_Pk\")"
+        "groups_Fk": "\"Groups\"(\"groups_id\")"
+    },
+    "RifleTraining": {
+        "members_Fk": "\"Members\"(\"members_id\")"
+    },
+    "M249Training": {
+        "members_Fk": "\"Members\"(\"members_id\")"
+    },
+    "M4Training": {
+        "members_Fk": "\"Members\"(\"members_id\")"
+    },
+    "GrenadeTraining": {
+        "members_Fk": "\"Members\"(\"members_id\")"
+    },
+    "M240Training": {
+        "members_Fk": "\"Members\"(\"members_id\")"
     },
     "Jobs": {
-        "squadrons_Fk": "\"Squadrons\"(\"recordid_Pk\")"
+        "squadrons_Fk": "\"Squadrons\"(\"squadrons_id\")"
     },
     "Slots": {
-        "appointmenttype_Fk": "\"Appointmenttype\"(\"recordid_Pk\")",
-        "members_Fk": "\"Members\"(\"recordid_Pk\")"
+        "appointmenttype_Fk": "\"Appointmenttype\"(\"appointmenttype_id\")",
+        "members_Fk": "\"Members\"(\"members_id\")"
     }
 }

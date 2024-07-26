@@ -1,7 +1,6 @@
 {
     "Members": [
         "Name",
-        "recordId_pk",
         "DODID",
         "Home Phone",
         "SSN",
@@ -20,11 +19,11 @@
         "Roles_fk",
         "Jobs_fk",
         "Groups_fk",
-        "Squadrons_fk"
+        "Squadrons_fk",
+        "Skills_M2M"
     ],
     "Requirements": [
         "Requirements",
-        "recordId_pk",
         "Members_fk",
         "AppointmentType_fk",
         "Status",
@@ -32,7 +31,6 @@
     ],
     "Squadrons": [
         "Squadron",
-        "recordId_pk",
         "Supervisor Name",
         "Squadron Readiness Status",
         "Image URL",
@@ -40,65 +38,60 @@
     ],
     "Groups": [
         "Group",
-        "recordId_pk",
         "Supervisor Name",
         "Group Readiness Status",
         "Image URL"
     ],
     "AppointmentType": [
         "Name",
-        "recordId_pk",
         "Duration Minutes"
     ],
     "Rifle Training": [
         "Member",
-        "recordId_pk",
         "Completed Date",
         "Expiration Date",
-        "Status"
+        "Status",
+        "Members_fk"
     ],
     "M249 Training": [
         "Member",
-        "recordId_pk",
         "Completed Date",
         "Expiration Date",
-        "Status"
+        "Status",
+        "Members_fk"
     ],
     "M4 Training": [
         "Member",
-        "recordId_pk",
         "Completed Date",
         "Expiration Date",
-        "Status"
+        "Status",
+        "Members_fk"
     ],
     "Grenade Training": [
         "Member",
-        "recordId_pk",
         "Completed Date",
         "Expiration Date",
-        "Status"
+        "Status",
+        "Members_fk"
     ],
     "M240 Training": [
         "Member",
-        "recordId_pk",
         "Completed Date",
         "Expiration Date",
-        "Status"
+        "Status",
+        "Members_fk"
     ],
     "Roles": [
         "Role Title",
-        "recordId_pk",
         "Role Description"
     ],
     "Jobs": [
         "Job Title",
-        "recordId_pk",
         "Description",
         "Squadrons_fk"
     ],
     "Vehicle Equipment": [
         "Name",
-        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -110,7 +103,6 @@
     ],
     "Maintenance Equipment": [
         "Name",
-        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -122,7 +114,6 @@
     ],
     "Communications Equipment": [
         "Name",
-        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -134,7 +125,6 @@
     ],
     "Aircraft Equipment": [
         "Name",
-        "recordId_pk",
         "Description",
         "Model",
         "Manufacturer",
@@ -146,7 +136,6 @@
     ],
     "Slots": [
         "Slot ID",
-        "recordId_pk",
         "Start Time",
         "End Time",
         "SlotCapacity",
@@ -157,7 +146,6 @@
     ],
     "Skills": [
         "Skill",
-        "recordId_pk",
         "Source",
         "Type"
     ]

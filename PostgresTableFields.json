@@ -1,7 +1,6 @@
 {
     "Members": [
         "name",
-        "recordid_Pk",
         "dodid",
         "homePhone",
         "ssn",
@@ -21,108 +20,101 @@
         "jobs_Fk",
         "groups_Fk",
         "squadrons_Fk",
-        "upstream_id",
+        "members_id",
         "updated_idx"
     ],
     "Requirements": [
         "requirements",
-        "recordid_Pk",
         "members_Fk",
         "appointmenttype_Fk",
         "status",
         "isbooked",
-        "upstream_id",
+        "requirements_id",
         "updated_idx"
     ],
     "Squadrons": [
         "squadron",
-        "recordid_Pk",
         "supervisorName",
         "squadronReadinessStatus",
         "imageUrl",
         "groups_Fk",
-        "upstream_id",
+        "squadrons_id",
         "updated_idx"
     ],
     "Groups": [
         "group",
-        "recordid_Pk",
         "supervisorName",
         "groupReadinessStatus",
         "imageUrl",
-        "upstream_id",
+        "groups_id",
         "updated_idx"
     ],
     "Appointmenttype": [
         "name",
-        "recordid_Pk",
         "durationMinutes",
-        "upstream_id",
+        "appointmenttype_id",
         "updated_idx"
     ],
     "RifleTraining": [
         "member",
-        "recordid_Pk",
         "completedDate",
         "expirationDate",
         "status",
-        "upstream_id",
+        "members_Fk",
+        "rifletraining_id",
         "updated_idx"
     ],
     "M249Training": [
         "member",
-        "recordid_Pk",
         "completedDate",
         "expirationDate",
         "status",
-        "upstream_id",
+        "members_Fk",
+        "m249Training_id",
         "updated_idx"
     ],
     "M4Training": [
         "member",
-        "recordid_Pk",
         "completedDate",
         "expirationDate",
         "status",
-        "upstream_id",
+        "members_Fk",
+        "m4Training_id",
         "updated_idx"
     ],
     "GrenadeTraining": [
         "member",
-        "recordid_Pk",
         "completedDate",
         "expirationDate",
         "status",
-        "upstream_id",
+        "members_Fk",
+        "grenadetraining_id",
         "updated_idx"
     ],
     "M240Training": [
         "member",
-        "recordid_Pk",
         "completedDate",
         "expirationDate",
         "status",
-        "upstream_id",
+        "members_Fk",
+        "m240Training_id",
         "updated_idx"
     ],
     "Roles": [
         "roleTitle",
-        "recordid_Pk",
         "roleDescription",
-        "upstream_id",
+        "roles_id",
         "updated_idx"
     ],
     "Jobs": [
         "jobTitle",
-        "recordid_Pk",
         "description",
         "squadrons_Fk",
-        "upstream_id",
+        "jobs_id",
         "updated_idx"
     ],
     "VehicleEquipment": [
         "name",
-        "recordid_Pk",
         "description",
         "model",
         "manufacturer",
@@ -131,12 +123,11 @@
         "condition",
         "lastMaintenanceDate",
         "nextMaintenanceDate",
-        "upstream_id",
+        "vehicleequipment_id",
         "updated_idx"
     ],
     "MaintenanceEquipment": [
         "name",
-        "recordid_Pk",
         "description",
         "model",
         "manufacturer",
@@ -145,12 +136,11 @@
         "condition",
         "lastMaintenanceDate",
         "nextMaintenanceDate",
-        "upstream_id",
+        "maintenanceequipment_id",
         "updated_idx"
     ],
     "CommunicationsEquipment": [
         "name",
-        "recordid_Pk",
         "description",
         "model",
         "manufacturer",
@@ -159,12 +149,11 @@
         "condition",
         "lastMaintenanceDate",
         "nextMaintenanceDate",
-        "upstream_id",
+        "communicationsequipment_id",
         "updated_idx"
     ],
     "AircraftEquipment": [
         "name",
-        "recordid_Pk",
         "description",
         "model",
         "manufacturer",
@@ -173,12 +162,11 @@
         "condition",
         "lastMaintenanceDate",
         "nextMaintenanceDate",
-        "upstream_id",
+        "aircraftequipment_id",
         "updated_idx"
     ],
     "Slots": [
         "slotId",
-        "recordid_Pk",
         "startTime",
         "endTime",
         "slotcapacity",
@@ -186,15 +174,14 @@
         "isbooked",
         "appointmenttype_Fk",
         "members_Fk",
-        "upstream_id",
+        "slots_id",
         "updated_idx"
     ],
     "Skills": [
         "skill",
-        "recordid_Pk",
         "source",
         "type",
-        "upstream_id",
+        "skills_id",
         "updated_idx"
     ]
 }

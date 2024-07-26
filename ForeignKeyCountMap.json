@@ -8,16 +8,16 @@
     ],
     "1": [
         "Squadrons",
-        "Jobs"
-    ],
-    "0": [
-        "Groups",
-        "Appointmenttype",
         "RifleTraining",
         "M249Training",
         "M4Training",
         "GrenadeTraining",
         "M240Training",
+        "Jobs"
+    ],
+    "0": [
+        "Groups",
+        "Appointmenttype",
         "Roles",
         "VehicleEquipment",
         "MaintenanceEquipment",

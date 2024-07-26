@@ -37,8 +37,7 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
             
             # many to many relation list will NOT be put into sql table
             elif pgFieldName[-3:] == "M2M":
-                pass
-            # TODO
+                continue
                 
 
             pgFields.append(pgFieldName)
@@ -53,7 +52,10 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
         
         # these two columns are needed for the upsert (sequin). 
         # if i already put them in the json, i don't have to add them again
-        pg_table_fields[pgTable].append("upstream_id")
+        
+        # will always be the name of the table formatted as a field + _id
+        pgTablePk = formatName.changeName(pgTable, True) + "_id" # upstream_id value here
+        pg_table_fields[pgTable].append(pgTablePk)
         pg_table_fields[pgTable].append("updated_idx")
 
 
@@ -71,10 +73,12 @@ PG_FOREIGN_KEYS = json.load(open("PostgresForeignKeyMap.json"))
 # fkField: Represents the foreign key field in the table.
 # fkReferenceTable: Represents the table that the foreign key references.
 def createFKRelation(fkDict, fkTable, fkField, fkReferenceTable):
+    pkOfReference = formatName.changeName(fkReferenceTable, True) + "_id" # upstream_id renamed to ex: members_id
+
     if fkTable not in fkDict:
-        fkDict[fkTable] = {fkField : f'"{fkReferenceTable}"("recordid_Pk")'}
+        fkDict[fkTable] = {fkField : f'"{fkReferenceTable}"("{pkOfReference}")'}
     else:
-        fkDict[fkTable][fkField] = f'"{fkReferenceTable}"("recordid_Pk")'
+        fkDict[fkTable][fkField] = f'"{fkReferenceTable}"("{pkOfReference}")'
      
 # with parameter because expecting to use it in a pipeline.py
 def sortTables(foreignKeyCountMap):
@@ -91,15 +95,11 @@ output: string
 fields and tables are surrounded by double quotes to preserve case sensitivity in pgdb
 '''
 def writeQuery(table, cols):
-    
-    # columnsQuery = '(upstream_id, updated_idx'
-    # numOfFields = len(PG_TABLE_FIELDS[table])
-    
+    pgTablePk = formatName.changeName(table, True) + "_id"
     columnsQuery = '('
     placeholders = '('
     numOfFields = len(cols)
     for i in range(numOfFields):
-        # field = PG_TABLE_FIELDS[table][i]
         col = cols[i]
         if i == numOfFields - 1: # last field
             columnsQuery += f', "{col}")'
@@ -111,23 +111,13 @@ def writeQuery(table, cols):
             columnsQuery += f', "{col}"'
             placeholders += '%s, '
 
-    # numOfCols = numOfFields + 2 # plus two because of upstream_id and updated_idx
-
-    
-    # for i in range(numOfFields):
-    #     if i == numOfFields - 1: # last col
-    #         placeholders += '%s)'
-    #     else:
-    #         placeholders += '%s, '
-
-
     # fieldnames / excluded query
     excludedQuery = ''
     first = True
 
     for i in range(numOfFields):
         col = cols[i]
-        if col != "upstream_id":
+        if col != pgTablePk:
             if not first:
                 excludedQuery += ', '
             excludedQuery += f'"{col}" = excluded."{col}"'
@@ -138,7 +128,7 @@ def writeQuery(table, cols):
     query = '''
     INSERT INTO "'''+table+'''" '''+columnsQuery+'''
     VALUES '''+placeholders+'''
-    ON CONFLICT (upstream_id) DO UPDATE
+    ON CONFLICT ("'''+pgTablePk+'''") DO UPDATE
     SET '''+excludedQuery+'''
     WHERE "'''+table+'''"."updated_idx" <= excluded."updated_idx";
     '''
@@ -158,22 +148,23 @@ def createTable(table):
     
     for i in range(len(PG_TABLE_FIELDS[table])):
         field = PG_TABLE_FIELDS[table][i]
+        pgTablePk = formatName.changeName(table, True) + "_id"
         prefix = ", "
         if i == 0:
             prefix = ""
     
     # if the last two letters of the field is Pk, then it is a primary key
-        if field[-2:] == "Pk":
-            query += f'{prefix}"{field}" TEXT'# PRIMARY KEY'
+        # if field[-2:] == "Pk":
+        #     query += f'{prefix}"{field}" TEXT'# PRIMARY KEY'
 
-        # elif field[-2:] == "Fk":
-        #     query += f'{prefix}"{field}" TEXT, '
-        #     query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
+        # # elif field[-2:] == "Fk":
+        # #     query += f'{prefix}"{field}" TEXT, '
+        # #     query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
 
-        elif field == "updated_idx":
+        if field == "updated_idx":
             query += f'{prefix}"{field}" BIGINT'
 
-        elif field == "upstream_id":
+        elif field == pgTablePk: 
             query += f'{prefix}"{field}" TEXT PRIMARY KEY'
 
         else:
@@ -197,11 +188,9 @@ def createJunctionTable(table1, table2):
     )
     cur = conn.cursor()
 
-    # NOTE: important!! upstream_id = recordid_Pk for tables that are being combined into junction tables
-
-
-    table1_pk = formatName.changeName(table1, True) + "_upstream_id" # Primary key for table1
-    table2_pk = formatName.changeName(table2, True) + "_upstream_id" # Primary key for table2
+    
+    table1_pk = formatName.changeName(table1, True) + "_id" # Primary key for table1
+    table2_pk = formatName.changeName(table2, True) + "_id" # Primary key for table2
 
     junction_table_name = f"{table1}_{table2}"
 
@@ -211,8 +200,8 @@ def createJunctionTable(table1, table2):
         "{table1_pk}" TEXT,
         "{table2_pk}" TEXT,
         PRIMARY KEY ("{table1_pk}", "{table2_pk}"),
-        FOREIGN KEY ("{table1_pk}") REFERENCES "{table1}"("recordid_Pk") ON DELETE CASCADE,
-        FOREIGN KEY ("{table2_pk}") REFERENCES "{table2}"("recordid_Pk") ON DELETE CASCADE
+        FOREIGN KEY ("{table1_pk}") REFERENCES "{table1}"("{table1_pk}") ON DELETE CASCADE,
+        FOREIGN KEY ("{table2_pk}") REFERENCES "{table2}"("{table2_pk}") ON DELETE CASCADE
     );
     '''
     
@@ -231,16 +220,8 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
         password=PG_PASSWORD
     )
     cur = conn.cursor()
-    # we are making the assumption that for tables that make up junction tables, recordid_Pk is the same as upstream_id
-    # this is the limitation of Sequin... on every message, the only field that we have a 100% guarantee of being
-    # presented is the upstream_id
-    # table1_upstream_id = formatName.changeName(table1, False)  # Primary key for table1
-    # table2_upstream_id = formatName.changeName(table2, False)  # Primary key for table2
-
     junction_table_name = f"{table1}_{table2}"
-    
-    # IDS ARE UPSTREAM IDS!!! NOTE
-    
+        
     for table2Id in table2Ids:
 
         query = f'''
@@ -330,67 +311,67 @@ def createTables():
     for tbl in tbls:
         createTable(tbl)
 
+# i am dumb
+# def alterPKs():
+#     conn = psycopg2.connect(
+#         host=PG_HOST,
+#         database=PG_DATABASE,
+#         user=PG_USER,
+#         password=PG_PASSWORD
+#     )
+#     cur = conn.cursor()
+#     cur.execute(f"SET search_path TO {PG_SCHEMA}")
 
-def alterPKs():
-    conn = psycopg2.connect(
-        host=PG_HOST,
-        database=PG_DATABASE,
-        user=PG_USER,
-        password=PG_PASSWORD
-    )
-    cur = conn.cursor()
-    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+#     for tbl in PG_TABLE_FIELDS.keys():
+#         try:
+#             # Check if the column exists
+#             cur.execute(f"""
+#                 SELECT column_name 
+#                 FROM information_schema.columns 
+#                 WHERE table_schema = '{PG_SCHEMA}' 
+#                 AND table_name = '{tbl}' 
+#                 AND column_name = 'recordid_Pk'
+#             """)
+#             column_exists = cur.fetchone()
+#             if not column_exists:
+#                 print(f"Column 'recordid_Pk' does not exist in table '{tbl}'. Skipping.")
+#                 continue
 
-    for tbl in PG_TABLE_FIELDS.keys():
-        try:
-            # Check if the column exists
-            cur.execute(f"""
-                SELECT column_name 
-                FROM information_schema.columns 
-                WHERE table_schema = '{PG_SCHEMA}' 
-                AND table_name = '{tbl}' 
-                AND column_name = 'recordid_Pk'
-            """)
-            column_exists = cur.fetchone()
-            if not column_exists:
-                print(f"Column 'recordid_Pk' does not exist in table '{tbl}'. Skipping.")
-                continue
+#             # Find the existing primary key constraint name
+#             cur.execute(f"""
+#                 SELECT constraint_name 
+#                 FROM information_schema.table_constraints 
+#                 WHERE table_schema = '{PG_SCHEMA}' 
+#                 AND table_name = '{tbl}' 
+#                 AND constraint_type = 'PRIMARY KEY'
+#             """)
+#             pk_constraint = cur.fetchone()
+#             print(f"Primary key constraint for table {tbl}: {pk_constraint}")
 
-            # Find the existing primary key constraint name
-            cur.execute(f"""
-                SELECT constraint_name 
-                FROM information_schema.table_constraints 
-                WHERE table_schema = '{PG_SCHEMA}' 
-                AND table_name = '{tbl}' 
-                AND constraint_type = 'PRIMARY KEY'
-            """)
-            pk_constraint = cur.fetchone()
-            print(f"Primary key constraint for table {tbl}: {pk_constraint}")
+#             if pk_constraint:
+#                 pk_constraint = pk_constraint[0]
+#                 # Drop the existing primary key constraint
+#                 drop_query = f'ALTER TABLE "{tbl}" DROP CONSTRAINT "{pk_constraint}"'
+#                 print(f"Executing: {drop_query}")
+#                 cur.execute(drop_query)
+#                 conn.commit()
+#                 print(f"Dropped primary key constraint '{pk_constraint}' from table '{tbl}'.")
 
-            if pk_constraint:
-                pk_constraint = pk_constraint[0]
-                # Drop the existing primary key constraint
-                drop_query = f'ALTER TABLE "{tbl}" DROP CONSTRAINT "{pk_constraint}"'
-                print(f"Executing: {drop_query}")
-                cur.execute(drop_query)
-                conn.commit()
-                print(f"Dropped primary key constraint '{pk_constraint}' from table '{tbl}'.")
+#             # Add the new primary key constraint
+#             add_pk_query = f'ALTER TABLE "{tbl}" ADD PRIMARY KEY ("recordid_Pk")'
+#             print(f"Executing: {add_pk_query}")
+#             cur.execute(add_pk_query)
+#             conn.commit()
+#             print(f"Added new primary key 'recordid_Pk' to table '{tbl}'.")
 
-            # Add the new primary key constraint
-            add_pk_query = f'ALTER TABLE "{tbl}" ADD PRIMARY KEY ("recordid_Pk")'
-            print(f"Executing: {add_pk_query}")
-            cur.execute(add_pk_query)
-            conn.commit()
-            print(f"Added new primary key 'recordid_Pk' to table '{tbl}'.")
+#         except Exception as e:
+#             print(f"Error modifying primary key for table {tbl}: {e}")
+#             conn.rollback()
+#         else:
+#             conn.commit()
 
-        except Exception as e:
-            print(f"Error modifying primary key for table {tbl}: {e}")
-            conn.rollback()
-        else:
-            conn.commit()
-
-    cur.close()
-    conn.close()
+#     cur.close()
+#     conn.close()
 
 
 def linkTables():
