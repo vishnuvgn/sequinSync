@@ -42,7 +42,6 @@
         "Group",
         "recordId_pk",
         "Supervisor Name",
-        "Group Readiness Score",
         "Group Readiness Status",
         "Image URL"
     ],

@@ -30,6 +30,20 @@ conn = psycopg2.connect(
 # Create a cursor object
 cur = conn.cursor()
 
+# these will be upstream ids. only 1:1 relations will need to have the distinction btw upstream_id and recordid_Pk. otherwise they are the same.
+# TODO: will write explanation. this is important
+# {
+#     (memberTable, skillTable) :{
+#         "mem1" : ["skill1", "skill2"]
+#     }
+# }
+
+M2M_MAPS = {}
+M2M_POPULATED = False
+
+
+
+
 def upsert_record(record):
     # print(record)
     
@@ -40,6 +54,10 @@ def upsert_record(record):
     
     # keys of the mapping table have to be the records expected in the sync
     airtableTable = airtables.TABLE_SEQUIN_SYNC_IDS[record["collection_id"]] 
+    if airtableTable == "Squadrons":
+        print("Squadrons")
+        with open("error.txt", "w") as f:
+            f.write(f'Squadrons: {record}')
     # print(airtableTable)
     sqlTable = sql.AIRTABLE_TO_SQL_MAP[airtableTable]
     
@@ -48,33 +66,7 @@ def upsert_record(record):
     updated_idx = record["updated_idx"] # bigint
 
     airtableFields = airtables.AT_TABLE_FIELDS[airtableTable]
-    # fields = [upstream_id, updated_idx] + [record["data"]["fields"][field] if field in record["data"]["fields"] else "" for field in airtableFields]
-    
-    
-    # look up fields are always sent as individual json objects in list : (['a', 'b', ['rec...']])
-    # have to extract the actual text from the one element list
-    # fields = [upstream_id, updated_idx]
-    # fields = []
-    # for field in airtableFields:
-    #     if field in record["data"]["fields"]:
-    #         # print(field)
-    #         # print(record["data"]["fields"])
 
-    #         if type(record["data"]["fields"][field]) == list and len(record["data"]["fields"][field]) == 1:
-    #             fields.append(record["data"]["fields"][field][0])
-    #         # psycopg2 doesn't like dictionaries --> the only dictionary passed in right now is an error message. Have to think about this a bit more if we will ever pass a dict.
-    #         elif type(record["data"]["fields"][field]) == dict:
-    #             print(record["data"]["fields"][field])
-    #             print(f'dict: {field}')
-
-    #             with open("error.txt", "w") as f:
-    #                 f.write(f'error {field}: {record["data"]["fields"][field]}')
-
-    #             fields.append("")
-
-    #         else:
-    #             fields.append(record["data"]["fields"][field])
-        
     fieldsSent = record["data"]["fields"].keys()
     # print(fieldsSent)
     PGCols = ["upstream_id", "updated_idx"]
@@ -84,18 +76,34 @@ def upsert_record(record):
         if field in airtableFields:
 
             value = record["data"]["fields"][field]
+            M2M_flag = False
+
+            if field[-3:] == "M2M": # value is a list
+                M2M_flag = True
+                print(f'found M2M: {field}')
+                refTable = field[:-4] # has to be spelled right in airtable
+                junctionTables = (sqlTable, formatName.changeName(refTable, False)) # tuple is key in dict
+                if junctionTables not in M2M_MAPS:
+                    M2M_MAPS[junctionTables] = {
+                        upstream_id : value # will be list of rec ids for the ref table
+                    }
+                else:
+                    M2M_MAPS[junctionTables][upstream_id] = value
+
+                
             if type(value) == list and len(value) == 1:
                 value = value[0]
             elif type(value) == dict:
                 with open("error.txt", "w") as f:
                     f.write(f'error {field}: {value}')
                 value = ""
-            values += (value, )
 
-            
-            PGField = formatName.changeName(field, True)
-            # print(f'PGField = {PGField}')
-            PGCols.append(PGField)
+            if M2M_flag == False: # M2M not a field in pg sql table. will be handled in the junction table which can only be populated after all tables populated
+                values += (value, )
+
+                PGField = formatName.changeName(field, True)
+                # print(f'PGField = {PGField}')
+                PGCols.append(PGField)
             
     # print(f'PGCols = {PGCols}')
     # print(f'values = {values}')
@@ -138,7 +146,21 @@ def run():
 
             # If there are no more messages to pull, wait for 5 seconds before trying again
             if not has_more(info):
-                logging.info("No more messages to pull, sleeping for 5 seconds")
+                logging.info("No more messages to pull")#, sleeping for 5 seconds")
+
+                if M2M_POPULATED == False:
+                    # junctionTables is the tuple key for the dict
+                    for junctionTables, recordMap in M2M_MAPS.items():
+                        # tbl1Id is the upstream_id of the record in the main table
+                        # tbl2Ids is a list of upstream_ids of the records in the ref table
+                        for tbl1Id, tbl2Ids in recordMap.items():
+                            tbl1, tbl2 = junctionTables
+                            # EX: "Members", "Skills", "mem1", ["skill1", "skill2"] (these will obviously be real upstream ids)
+                            sql.populateJunctionTable(tbl1, tbl2, tbl1Id, tbl2Ids)
+                    M2M_POPULATED = True
+                else:
+                    logging.info("sleeping for 5 seconds")
+
                 time.sleep(5)
 
         except Exception as e:
@@ -185,5 +207,3 @@ run()
 # Close the cursor and connection
 cur.close()
 conn.close()
-
-# 11:24.79

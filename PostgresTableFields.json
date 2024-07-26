@@ -48,7 +48,6 @@
         "group",
         "recordid_Pk",
         "supervisorName",
-        "groupReadinessScore",
         "groupReadinessStatus",
         "imageUrl",
         "upstream_id",

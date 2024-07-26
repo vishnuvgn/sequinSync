@@ -34,6 +34,12 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
 
                 # count how many foreign keys there are
                 fkCount += 1
+            
+            # many to many relation list will NOT be put into sql table
+            elif pgFieldName[-3:] == "M2M":
+                pass
+            # TODO
+                
 
             pgFields.append(pgFieldName)
         
@@ -191,11 +197,15 @@ def createJunctionTable(table1, table2):
     )
     cur = conn.cursor()
 
-    table1_pk = formatName.changeName(table1, False)  # Primary key for table1
-    table2_pk = formatName.changeName(table2, False)  # Primary key for table2
+    # NOTE: important!! upstream_id = recordid_Pk for tables that are being combined into junction tables
+
+
+    table1_pk = formatName.changeName(table1, True) + "_upstream_id" # Primary key for table1
+    table2_pk = formatName.changeName(table2, True) + "_upstream_id" # Primary key for table2
 
     junction_table_name = f"{table1}_{table2}"
 
+    
     query = f'''
     CREATE TABLE IF NOT EXISTS "{junction_table_name}" (
         "{table1_pk}" TEXT,
@@ -208,10 +218,45 @@ def createJunctionTable(table1, table2):
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
     cur.execute(query)
-    print(f'created {table1}{table2}')
+    print(f'created {table1}_{table2}')
     conn.commit()
     cur.close()
     conn.close()
+
+def populateJunctionTable(table1, table2, table1Id, table2Ids):
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
+    # we are making the assumption that for tables that make up junction tables, recordid_Pk is the same as upstream_id
+    # this is the limitation of Sequin... on every message, the only field that we have a 100% guarantee of being
+    # presented is the upstream_id
+    # table1_upstream_id = formatName.changeName(table1, False)  # Primary key for table1
+    # table2_upstream_id = formatName.changeName(table2, False)  # Primary key for table2
+
+    junction_table_name = f"{table1}_{table2}"
+    
+    # IDS ARE UPSTREAM IDS!!! NOTE
+    
+    for table2Id in table2Ids:
+
+        query = f'''
+        INSERT INTO "{junction_table_name}" ("{table1Id}", "{table2Id}")
+        VALUES ('{table1Id}', '{table2Id}')
+        '''
+        
+        cur.execute(f"SET search_path TO {PG_SCHEMA}")
+        cur.execute(query)
+
+    print(f'populated {junction_table_name}')
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
 
 
 # be fucking careful
@@ -346,8 +391,6 @@ def alterPKs():
 
     cur.close()
     conn.close()
-
-
 
 
 def linkTables():
