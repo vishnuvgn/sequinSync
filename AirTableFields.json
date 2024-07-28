@@ -15,6 +15,7 @@
         "JobTitle",
         "aws s3 link",
         "Complete Glide Member URL",
+        "Readiness Score",
         "hasConflict",
         "Roles_fk",
         "Jobs_fk",

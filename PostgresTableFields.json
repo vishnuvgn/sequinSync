@@ -15,6 +15,7 @@
         "jobtitle",
         "awsS3Link",
         "completeGlideMemberUrl",
+        "readinessScore",
         "hasconflict",
         "roles_Fk",
         "jobs_Fk",
