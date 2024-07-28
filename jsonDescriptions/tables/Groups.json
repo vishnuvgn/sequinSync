@@ -1,0 +1,31 @@
+{
+    "tableName": "Groups",
+    "tableDescription": "Contains information about groups",
+    "columns": [
+        {
+            "columnName": "groups_id",
+            "columnDescription": "The unique identifier for the group entry"
+        },
+        {
+            "columnName": "group",
+            "columnDescription": "The name of the group"
+        },
+        {
+            "columnName": "supervisorName",
+            "columnDescription": "The name of the group's supervisor"
+        },
+        {
+            "columnName": "groupReadinessStatus",
+            "columnDescription": "The readiness status of the group (e.g., Green, Red, Yellow)"
+        },
+        {
+            "columnName": "imageUrl",
+            "columnDescription": "The URL of the group's image"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

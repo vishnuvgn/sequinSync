@@ -1,0 +1,51 @@
+{
+    "tableName": "VehicleEquipment",
+    "tableDescription": "Contains information about vehicle equipment",
+    "columns": [
+        {
+            "columnName": "vehicleequipment_id",
+            "columnDescription": "The unique identifier for the vehicle equipment"
+        },
+        {
+            "columnName": "name",
+            "columnDescription": "The name of the vehicle equipment"
+        },
+        {
+            "columnName": "description",
+            "columnDescription": "Detailed description of the equipment"
+        },
+        {
+            "columnName": "model",
+            "columnDescription": "Model of the equipment"
+        },
+        {
+            "columnName": "manufacturer",
+            "columnDescription": "Manufacturer of the equipment"
+        },
+        {
+            "columnName": "serialnumber",
+            "columnDescription": "Serial number of the equipment"
+        },
+        {
+            "columnName": "acquisitionDate",
+            "columnDescription": "Date when the equipment was acquired"
+        },
+        {
+            "columnName": "condition",
+            "columnDescription": "Current condition of the equipment"
+        },
+        {
+            "columnName": "lastMaintenanceDate",
+            "columnDescription": "Date of the last maintenance"
+        },
+        {
+            "columnName": "nextMaintenanceDate",
+            "columnDescription": "Date of the next scheduled maintenance"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index of the last update"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

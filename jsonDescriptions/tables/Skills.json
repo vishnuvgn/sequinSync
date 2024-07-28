@@ -1,0 +1,27 @@
+{
+    "tableName": "Skills",
+    "tableDescription": "Contains information about skills",
+    "columns": [
+        {
+            "columnName": "skills_id",
+            "columnDescription": "The unique identifier for the skill entry"
+        },
+        {
+            "columnName": "skill",
+            "columnDescription": "The name of the skill (e.g., Aerospace Engineer, Aircraft Mechanic, Air Traffic Controller)"
+        },
+        {
+            "columnName": "source",
+            "columnDescription": "The source of the skill (e.g., Civilian, Military)"
+        },
+        {
+            "columnName": "type",
+            "columnDescription": "The type of credential or training associated with the skill (e.g., Certification, Education, Letter of Designation, License, Training)"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

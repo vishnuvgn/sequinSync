@@ -1,0 +1,35 @@
+{
+    "tableName": "Requirements",
+    "tableDescription": "Contains information about requirements",
+    "columns": [
+        {
+            "columnName": "requirements_id",
+            "columnDescription": "Unique identifier for each requirement"
+        },
+        {
+            "columnName": "requirements",
+            "columnDescription": "Name of requirement for a person"
+        },
+        {
+            "columnName": "status",
+            "columnDescription": "Current status of the requirement (e.g., COMPLETE, INCOMPLETE)"
+        },
+        {
+            "columnName": "isbooked",
+            "columnDescription": "Indicates whether the requirement is booked (true/false)"
+        },
+        {
+            "columnName": "appointmenttype_Fk",
+            "columnDescription": "Foreign Key to Appointmenttype, ref: Appointmenttype.appointmenttype_id"
+        },
+        {
+            "columnName": "members_Fk",
+            "columnDescription": "Foreign Key to Members, ref: Members.members_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

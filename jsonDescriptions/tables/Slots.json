@@ -1,0 +1,47 @@
+{
+    "tableName": "Slots",
+    "tableDescription": "Contains information about slots",
+    "columns": [
+        {
+            "columnName": "slots_id",
+            "columnDescription": "Unique identifier for each slot"
+        },
+        {
+            "columnName": "slotId",
+            "columnDescription": "Primary key in Airtable"
+        },
+        {
+            "columnName": "startTime",
+            "columnDescription": "The start time of the slot"
+        },
+        {
+            "columnName": "endTime",
+            "columnDescription": "The end time of the slot"
+        },
+        {
+            "columnName": "slotcapacity",
+            "columnDescription": "Maximum number of people that can book the slot"
+        },
+        {
+            "columnName": "slotused",
+            "columnDescription": "Number of people who have booked the slot"
+        },
+        {
+            "columnName": "isbooked",
+            "columnDescription": "Indicates if the slot is booked (1) or not (0)"
+        },
+        {
+            "columnName": "appointmenttype_Fk",
+            "columnDescription": "Foreign Key to Appointmenttype, ref: Appointmenttype.appointmenttype_id"
+        },
+        {
+            "columnName": "members_Fk",
+            "columnDescription": "Foreign Key to Members, ref: Members.members_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates to the slot"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

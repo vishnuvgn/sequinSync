@@ -1,0 +1,330 @@
+[
+    {
+      "tableName": "Members",
+      "schemaName": "ingestion",
+      "tableDescription": "Contains information about each member. This table also contains the foreign keys to several other tables.",
+      "columns": [
+        {
+          "columnName": "upstream_id",
+          "columnDescription": "The primary key for the table. This is a unique identifier for each member."
+        },
+        {
+          "columnName": "updated_idx",
+          "columnDescription": "The updated_idx is a sequential index that increments every time a record is created, updated, or deleted ensuring that only the most recent version of a record is written to the database."
+        },
+        {
+          "columnName": "name",
+          "columnDescription": "The name of the member"
+        },
+        {
+          "columnName": "dodid",
+          "columnDescription": "The Department of Defense Identification number of the member"
+        },
+        {
+          "columnName": "homePhone",
+          "columnDescription": "The home phone number of the member"
+        },
+        {
+          "columnName": "ssn",
+          "columnDescription": "The Social Security Number of the member"
+        },
+        {
+          "columnName": "dateOfBirth",
+          "columnDescription": "The date of birth of the member"
+        },
+        {
+          "columnName": "dateArrivedAtStation",
+          "columnDescription": "The date when the member arrived at the station"
+        },
+        {
+          "columnName": "age",
+          "columnDescription": "The age of the member"
+        },
+        {
+          "columnName": "personalEmail",
+          "columnDescription": "The personal email address of the member"
+        },
+        {
+          "columnName": "homeAddress",
+          "columnDescription": "The home address of the member"
+        },
+        {
+          "columnName": "militaryEmail",
+          "columnDescription": "The military email address of the member"
+        },
+        {
+          "columnName": "gender",
+          "columnDescription": "The gender of the member"
+        },
+        {
+          "columnName": "personalTagline",
+          "columnDescription": "The personal tagline of the member"
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member"
+        },
+        {
+          "columnName": "rifleCxn",
+          "columnDescription": "A foreign key corresponding with the \"rifleId\" of the Rifle table. Querying that table with this value can be used to determine the member's current training status."
+        },
+        {
+          "columnName": "m249Cxn",
+          "columnDescription": "A foreign key corresponding with the \"m249Id\" column of the M249 table. Querying that table with this value can be used to determine the member's current training status."
+        },
+        {
+          "columnName": "m4Cxn",
+          "columnDescription": "A foreign key corresponding with the \"m4Id\" column of the M4 table. Querying that table with this value can be used to determine the member's current training status."
+        },
+        {
+          "columnName": "grenadeCxn",
+          "columnDescription": "A foreign key corresponding with the \"grenadeId\" column of the Grenade table. Querying that table with this value can be used to determine the member's current training status."
+        },
+        {
+          "columnName": "240BCxn",
+          "columnDescription": "A foreign key corresponding with the \"240BId\" column of the M240B table. Querying that table with this value can be used to determine the member's current training status."
+        }
+      ]
+    },
+    {
+      "tableName": "SampleDocuments",
+      "schemaName": "ingestion_test",
+      "tableDescription": "Contains information about the documents that are uploaded by the members",
+      "columns": [
+        {
+          "columnName": "sampleDocumentsId",
+          "columnDescription": "The primary key of the document."
+        },
+        {
+          "": "documentType",
+          "columnDescription": "The type of document. Ex: PDF, Video, Voice Memo, Photo Gallery, Keynote, Excel Spreadsheet, Word Document Report, Meeting Summary, CSV Certification File."
+        },
+        {
+          "columnName": "memoTitle",
+          "columnDescription": "The title of the document."
+        },
+        {
+          "columnName": "authorDescription",
+          "columnDescription": "The author / human source of the document."
+        },
+        {
+          "columnName": "targetAudience",
+          "columnDescription": "Who the document will be made available to."
+        },
+        {
+          "columnName": "category",
+          "columnDescription": "The category the document focuses on."
+        },
+        {
+          "columnName": "topic",
+          "columnDescription": "The topic the document focuses on. A subsect of category."
+        },
+        {
+          "columnName": "accuracySeed",
+          "columnDescription": "A randomly generated word that is unique to the document. Meant for testing how accurate the search function is."
+        },
+        {
+          "columnName": "formattedCreatedDate&Time",
+          "columnDescription": "The date and time the document was created."
+        },
+        {
+          "columnName": "sentiment",
+          "columnDescription": "The sentiment of the document. Strongly Negative, Somewhat Negative, Neutral, Somewhat Positive, or Strongly Positive."
+        },
+        {
+          "columnName": "cleanNote",
+          "columnDescription": "A comprehensive note on the document that can include meeting summaries, key points, etc"
+        }
+      ]
+    },
+    {
+      "tableName": "Rifle",
+      "schemaName": "ingestion",
+      "tableDescription": "This table stores detailed information about rifle weapons training statuses, including completion dates and status indicators.",
+      "columns": [
+        {
+          "columnName": "rifleId",
+          "columnDescription": "The primary key of the rifle record."
+        },
+        {
+          "columnName": "requirement",
+          "columnDescription": "The rifle training group the member is in."
+        },
+        {
+          "columnName": "lastCompletionDate",
+          "columnDescription": "The date the member last completed rifle training."
+        },
+        {
+          "columnName": "daysSinceCompletion",
+          "columnDescription": "The number of days since the member last completed rifle training."
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member's rifle training. Either CURRENT or OVERDUE"
+        },
+        {
+          "columnName": "qualificationExpirationDate",
+          "columnDescription": "The date the member's rifle qualification expires."
+        }
+      ]
+    },
+    {
+      "tableName": "M249",
+      "schemaName": "ingestion",
+      "tableDescription": "This table stores detailed information about M249 weapons training statuses, including completion dates and status indicators.",
+      "columns": [
+        {
+          "columnName": "m249Id",
+          "columnDescription": "The primary key of the M249 record."
+        },
+        {
+          "columnName": "requirement",
+          "columnDescription": "The M249 training group the member is in."
+        },
+        {
+          "columnName": "lastCompletionDate",
+          "columnDescription": "The date the member last completed M249 training."
+        },
+        {
+          "columnName": "daysSinceCompletion",
+          "columnDescription": "The number of days since the member last completed M249 training."
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member's M249 training. Either CURRENT or OVERDUE"
+        },
+        {
+          "columnName": "qualificationExpirationDate",
+          "columnDescription": "The date the member's M249 qualification expires."
+        }
+      ]
+    },
+    {
+      "tableName": "M4",
+      "schemaName": "ingestion",
+      "tableDescription": "This table stores detailed records of each member's M4 weapons training, including completion dates and status indicators.",
+      "columns": [
+        {
+          "columnName": "upstream_id",
+          "columnDescription": "The primary key for the table. This is a unique identifier for each member's M4 record."
+        },
+        {
+          "columnName": "updated_idx",
+          "columnDescription": "The updated_idx is a sequential index that increments every time a record is created, updated, or deleted ensuring that only the most recent version of a record is written to the database."
+        },
+        {
+          "columnName": "m4Id",
+          "columnDescription": "The primary key of the M4 record."
+        },
+        {
+          "columnName": "requirement",
+          "columnDescription": "The M4 training group the member is in."
+        },
+        {
+          "columnName": "lastCompletionDate",
+          "columnDescription": "The date the member last completed M4 training."
+        },
+        {
+          "columnName": "daysSinceCompletion",
+          "columnDescription": "The number of days since the member last completed M4 training."
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member's M4 training. Either CURRENT or OVERDUE"
+        },
+        {
+          "columnName": "qualificationExpirationDate",
+          "columnDescription": "The date the member's M4 qualification expires."
+        }
+      ]
+    },
+    {
+      "tableName": "Grenade",
+      "schemaName": "ingestion",
+      "tableDescription": "This table stores detailed information about Grenade weapons training statuses, including completion dates and status indicators.",
+      "columns": [
+        {
+          "columnName": "grenadeId",
+          "columnDescription": "The primary key of the grenade record."
+        },
+        {
+          "columnName": "requirement",
+          "columnDescription": "The grenade training group the member is in."
+        },
+        {
+          "columnName": "lastCompletionDate",
+          "columnDescription": "The date the member last completed grenade training."
+        },
+        {
+          "columnName": "daysSinceCompletion",
+          "columnDescription": "The number of days since the member last completed grenade training."
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member's grenade training. Either CURRENT or OVERDUE"
+        },
+        {
+          "columnName": "qualificationExpirationDate",
+          "columnDescription": "The date the member's grenade qualification expires."
+        }
+      ]
+    },
+    {
+      "tableName": "240B",
+      "schemaName": "ingestion",
+      "tableDescription": "This table stores detailed information about 240B weapons training statuses, including completion dates and status indicators.",
+      "columns": [
+        {
+          "columnName": "240BId",
+          "columnDescription": "The primary key of the 240B record."
+        },
+        {
+          "columnName": "requirement",
+          "columnDescription": "The 240B training group the member is in."
+        },
+        {
+          "columnName": "lastCompletionDate",
+          "columnDescription": "The date the member last completed 240B training."
+        },
+        {
+          "columnName": "daysSinceCompletion",
+          "columnDescription": "The number of days since the member last completed 240B training."
+        },
+        {
+          "columnName": "status",
+          "columnDescription": "The status of the member's 240B training. Either CURRENT or OVERDUE"
+        },
+        {
+          "columnName": "qualificationExpirationDate",
+          "columnDescription": "The date the member's 240B qualification expires."
+        }
+      ]
+    },
+    {
+      "tableName": "VehicleReadinessTestTable",
+      "schemaName": "ingestion",
+      "tableDescription": "Contains information about vehicle conditions",
+      "columns": [
+        {
+          "columnName": "id",
+          "columnDescription": "The database id of the vehicle"
+        },
+        {
+          "columnName": "vehicleName",
+          "columnDescription": "The name of the vehicle"
+        },
+        {
+          "columnName": "lastInspectionDate",
+          "columnDescription": "The last inspection date for the vehicle"
+        },
+        {
+          "columnName": "vehicleType",
+          "columnDescription": "An enum value for the vehicle type, possible values are: 'AIRCRAFT'"
+        },
+        {
+          "columnName": "condition",
+          "columnDescription": "An enum value for the condition of the vehicle as of it's last inspection, possible values are: 'POOR', 'FAIR', 'GOOD', 'NEW'"
+        }
+      ]
+    }
+  ]

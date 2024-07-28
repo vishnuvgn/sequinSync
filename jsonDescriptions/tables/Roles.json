@@ -1,0 +1,23 @@
+{
+    "tableName": "Roles",
+    "tableDescription": "Contains information about roles",
+    "columns": [
+        {
+            "columnName": "roles_id",
+            "columnDescription": "The unique identifier for the role entry"
+        },
+        {
+            "columnName": "roleTitle",
+            "columnDescription": "The title of the role (e.g., Airman, Commander, Health Provider, Training Provider, Supervisor)"
+        },
+        {
+            "columnName": "roleDescription",
+            "columnDescription": "A description of the role's permissions and responsibilities (e.g., See only their own appointments, Sees all records for all airman in the command, Oversees health-related appointments, Oversees training-related appointments, See all appointments for their Unit)"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

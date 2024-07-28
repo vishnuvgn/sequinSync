@@ -1,0 +1,95 @@
+{
+    "tableName": "Members",
+    "tableDescription": "Contains information about members",
+    "columns": [
+        {
+            "columnName": "members_id",
+            "columnDescription": "Unique identifier for each member"
+        },
+        {
+            "columnName": "name",
+            "columnDescription": "Member's full name"
+        },
+        {
+            "columnName": "dodid",
+            "columnDescription": "Department of Defense Identification Number"
+        },
+        {
+            "columnName": "homePhone",
+            "columnDescription": "Member's home phone number"
+        },
+        {
+            "columnName": "ssn",
+            "columnDescription": "Member's Social Security Number"
+        },
+        {
+            "columnName": "dateOfBirth",
+            "columnDescription": "Member's date of birth (MM/DD/YYYY)"
+        },
+        {
+            "columnName": "dateArrivedAtStation",
+            "columnDescription": "Date member arrived at current station (MM/DD/YYYY)"
+        },
+        {
+            "columnName": "age",
+            "columnDescription": "Member's age"
+        },
+        {
+            "columnName": "personalEmail",
+            "columnDescription": "Member's personal email address"
+        },
+        {
+            "columnName": "militaryEmail",
+            "columnDescription": "Member's military email address"
+        },
+        {
+            "columnName": "homeAddress",
+            "columnDescription": "Member's home address"
+        },
+        {
+            "columnName": "gender",
+            "columnDescription": "Member's gender"
+        },
+        {
+            "columnName": "personalTagline",
+            "columnDescription": "Member's personal tagline or motto"
+        },
+        {
+            "columnName": "jobtitle",
+            "columnDescription": "Member's job title"
+        },
+        {
+            "columnName": "awsS3Link",
+            "columnDescription": "Link to member's image stored on AWS S3"
+        },
+        {
+            "columnName": "completeGlideMemberUrl",
+            "columnDescription": "URL to member's profile on Glide"
+        },
+        {
+            "columnName": "hasconflict",
+            "columnDescription": "Indicates if the member has scheduling conflicts (0: No conflict, 1: Conflict)"
+        },
+        {
+            "columnName": "roles_Fk",
+            "columnDescription": "Foreign key to Roles table, ref: Roles.roles_id"
+        },
+        {
+            "columnName": "jobs_Fk",
+            "columnDescription": "Foreign key to Jobs table, ref: Jobs.jobs_id"
+        },
+        {
+            "columnName": "groups_Fk",
+            "columnDescription": "Foreign key to Groups table, ref: Groups.groups_id"
+        },
+        {
+            "columnName": "squadrons_Fk",
+            "columnDescription": "Foreign key to Squadrons table, ref: Squadrons.squadrons_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

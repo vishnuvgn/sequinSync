@@ -1,0 +1,35 @@
+{
+    "tableName": "M249Training",
+    "tableDescription": "Contains information about M249 training",
+    "columns": [
+        {
+            "columnName": "m249Training_id",
+            "columnDescription": "The unique identifier for the M249 training entry"
+        },
+        {
+            "columnName": "member",
+            "columnDescription": "The name of the member whose training it is"
+        },
+        {
+            "columnName": "completedDate",
+            "columnDescription": "The date when the M249 training was completed"
+        },
+        {
+            "columnName": "expirationDate",
+            "columnDescription": "The expiration date of the M249 training certification"
+        },
+        {
+            "columnName": "status",
+            "columnDescription": "The current status of the M249 training (e.g., Complete, Incomplete)"
+        },
+        {
+            "columnName": "members_Fk",
+            "columnDescription": "Foreign key to Members, ref: Members.members_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

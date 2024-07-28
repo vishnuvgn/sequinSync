@@ -1,0 +1,27 @@
+{
+    "tableName": "Jobs",
+    "tableDescription": "Contains information about jobs",
+    "columns": [
+        {
+            "columnName": "jobs_id",
+            "columnDescription": "The unique identifier for the job entry"
+        },
+        {
+            "columnName": "jobTitle",
+            "columnDescription": "The title of the job"
+        },
+        {
+            "columnName": "description",
+            "columnDescription": "A detailed description of the job responsibilities and duties"
+        },
+        {
+            "columnName": "squadrons_Fk",
+            "columnDescription": "Foreign key to Squadrons, ref: Squadrons.squadrons_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

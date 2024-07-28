@@ -1,0 +1,741 @@
+[
+    {
+        "tableName": "Requirements",
+        "tableDescription": "Contains information about requirements",
+        "columns": [
+            {
+                "columnName": "requirements_id",
+                "columnDescription": "Unique identifier for each requirement"
+            },
+            {
+                "columnName": "requirements",
+                "columnDescription": "Name of requirement for a person"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "Current status of the requirement (e.g., COMPLETE, INCOMPLETE)"
+            },
+            {
+                "columnName": "isbooked",
+                "columnDescription": "Indicates whether the requirement is booked (true/false)"
+            },
+            {
+                "columnName": "appointmenttype_Fk",
+                "columnDescription": "Foreign Key to Appointmenttype, ref: Appointmenttype.appointmenttype_id"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign Key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Roles",
+        "tableDescription": "Contains information about roles",
+        "columns": [
+            {
+                "columnName": "roles_id",
+                "columnDescription": "The unique identifier for the role entry"
+            },
+            {
+                "columnName": "roleTitle",
+                "columnDescription": "The title of the role (e.g., Airman, Commander, Health Provider, Training Provider, Supervisor)"
+            },
+            {
+                "columnName": "roleDescription",
+                "columnDescription": "A description of the role's permissions and responsibilities (e.g., See only their own appointments, Sees all records for all airman in the command, Oversees health-related appointments, Oversees training-related appointments, See all appointments for their Unit)"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "RifleTraining",
+        "tableDescription": "Contains information about rifle training",
+        "columns": [
+            {
+                "columnName": "rifletraining_id",
+                "columnDescription": "The unique identifier for the rifle training entry"
+            },
+            {
+                "columnName": "member",
+                "columnDescription": "The name of the member whose training it is"
+            },
+            {
+                "columnName": "completedDate",
+                "columnDescription": "The date when the rifle training was completed"
+            },
+            {
+                "columnName": "expirationDate",
+                "columnDescription": "The expiration date of the rifle training certification"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "The current status of the rifle training (e.g., Complete, Incomplete)"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Appointmenttype",
+        "tableDescription": "Contains information about appointment types",
+        "columns": [
+            {
+                "columnName": "appointmenttype_id",
+                "columnDescription": "The unique identifier for the appointment type"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "The name of the appointment type"
+            },
+            {
+                "columnName": "durationMinutes",
+                "columnDescription": "The duration of the appointment in minutes"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "VehicleEquipment",
+        "tableDescription": "Contains information about vehicle equipment",
+        "columns": [
+            {
+                "columnName": "vehicleequipment_id",
+                "columnDescription": "The unique identifier for the vehicle equipment"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "The name of the vehicle equipment"
+            },
+            {
+                "columnName": "description",
+                "columnDescription": "Detailed description of the equipment"
+            },
+            {
+                "columnName": "model",
+                "columnDescription": "Model of the equipment"
+            },
+            {
+                "columnName": "manufacturer",
+                "columnDescription": "Manufacturer of the equipment"
+            },
+            {
+                "columnName": "serialnumber",
+                "columnDescription": "Serial number of the equipment"
+            },
+            {
+                "columnName": "acquisitionDate",
+                "columnDescription": "Date when the equipment was acquired"
+            },
+            {
+                "columnName": "condition",
+                "columnDescription": "Current condition of the equipment"
+            },
+            {
+                "columnName": "lastMaintenanceDate",
+                "columnDescription": "Date of the last maintenance"
+            },
+            {
+                "columnName": "nextMaintenanceDate",
+                "columnDescription": "Date of the next scheduled maintenance"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index of the last update"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "M249Training",
+        "tableDescription": "Contains information about M249 training",
+        "columns": [
+            {
+                "columnName": "m249Training_id",
+                "columnDescription": "The unique identifier for the M249 training entry"
+            },
+            {
+                "columnName": "member",
+                "columnDescription": "The name of the member whose training it is"
+            },
+            {
+                "columnName": "completedDate",
+                "columnDescription": "The date when the M249 training was completed"
+            },
+            {
+                "columnName": "expirationDate",
+                "columnDescription": "The expiration date of the M249 training certification"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "The current status of the M249 training (e.g., Complete, Incomplete)"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Slots",
+        "tableDescription": "Contains information about slots",
+        "columns": [
+            {
+                "columnName": "slots_id",
+                "columnDescription": "Unique identifier for each slot"
+            },
+            {
+                "columnName": "slotId",
+                "columnDescription": "Primary key in Airtable"
+            },
+            {
+                "columnName": "startTime",
+                "columnDescription": "The start time of the slot"
+            },
+            {
+                "columnName": "endTime",
+                "columnDescription": "The end time of the slot"
+            },
+            {
+                "columnName": "slotcapacity",
+                "columnDescription": "Maximum number of people that can book the slot"
+            },
+            {
+                "columnName": "slotused",
+                "columnDescription": "Number of people who have booked the slot"
+            },
+            {
+                "columnName": "isbooked",
+                "columnDescription": "Indicates if the slot is booked (1) or not (0)"
+            },
+            {
+                "columnName": "appointmenttype_Fk",
+                "columnDescription": "Foreign Key to Appointmenttype, ref: Appointmenttype.appointmenttype_id"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign Key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates to the slot"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "MaintenanceEquipment",
+        "tableDescription": "Contains information about maintenance equipment",
+        "columns": [
+            {
+                "columnName": "maintenanceequipment_id",
+                "columnDescription": "The unique identifier for the maintenance equipment entry"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "The name of the maintenance equipment"
+            },
+            {
+                "columnName": "description",
+                "columnDescription": "A description of the maintenance equipment"
+            },
+            {
+                "columnName": "model",
+                "columnDescription": "The model of the maintenance equipment"
+            },
+            {
+                "columnName": "manufacturer",
+                "columnDescription": "The manufacturer of the maintenance equipment"
+            },
+            {
+                "columnName": "serialNumber",
+                "columnDescription": "The serial number of the maintenance equipment"
+            },
+            {
+                "columnName": "acquisitionDate",
+                "columnDescription": "The date when the maintenance equipment was acquired"
+            },
+            {
+                "columnName": "condition",
+                "columnDescription": "The current condition of the maintenance equipment (e.g., Good, Fair, New)"
+            },
+            {
+                "columnName": "lastMaintenanceDate",
+                "columnDescription": "The date when the maintenance equipment was last maintained"
+            },
+            {
+                "columnName": "nextMaintenanceDate",
+                "columnDescription": "The date when the next maintenance is scheduled for the equipment"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "GrenadeTraining",
+        "tableDescription": "Contains information about grenade training",
+        "columns": [
+            {
+                "columnName": "grenadetraining_id",
+                "columnDescription": "The unique identifier for the grenade training entry"
+            },
+            {
+                "columnName": "member",
+                "columnDescription": "The name of the member whose training it is"
+            },
+            {
+                "columnName": "completedDate",
+                "columnDescription": "The date when the grenade training was completed"
+            },
+            {
+                "columnName": "expirationDate",
+                "columnDescription": "The date when the grenade training certification expires"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "The status of the grenade training (e.g., Complete, Incomplete)"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign Key to the Members table, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "AircraftEquipment",
+        "tableDescription": "Contains information about aircraft equipment",
+        "columns": [
+            {
+                "columnName": "aircraftequipment_id",
+                "columnDescription": "The unique identifier for the aircraft equipment"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "The name of the aircraft equipment"
+            },
+            {
+                "columnName": "description",
+                "columnDescription": "A brief description of the aircraft equipment"
+            },
+            {
+                "columnName": "model",
+                "columnDescription": "The model of the aircraft equipment"
+            },
+            {
+                "columnName": "manufacturer",
+                "columnDescription": "The manufacturer of the aircraft equipment"
+            },
+            {
+                "columnName": "serialNumber",
+                "columnDescription": "The serial number of the aircraft equipment"
+            },
+            {
+                "columnName": "acquisitionDate",
+                "columnDescription": "The date when the aircraft equipment was acquired"
+            },
+            {
+                "columnName": "condition",
+                "columnDescription": "The current condition of the aircraft equipment"
+            },
+            {
+                "columnName": "lastMaintenanceDate",
+                "columnDescription": "The date when the aircraft equipment was last maintained"
+            },
+            {
+                "columnName": "nextMaintenanceDate",
+                "columnDescription": "The date when the next maintenance is scheduled for the aircraft equipment"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Members",
+        "tableDescription": "Contains information about members",
+        "columns": [
+            {
+                "columnName": "members_id",
+                "columnDescription": "Unique identifier for each member"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "Member's full name"
+            },
+            {
+                "columnName": "dodid",
+                "columnDescription": "Department of Defense Identification Number"
+            },
+            {
+                "columnName": "homePhone",
+                "columnDescription": "Member's home phone number"
+            },
+            {
+                "columnName": "ssn",
+                "columnDescription": "Member's Social Security Number"
+            },
+            {
+                "columnName": "dateOfBirth",
+                "columnDescription": "Member's date of birth (MM/DD/YYYY)"
+            },
+            {
+                "columnName": "dateArrivedAtStation",
+                "columnDescription": "Date member arrived at current station (MM/DD/YYYY)"
+            },
+            {
+                "columnName": "age",
+                "columnDescription": "Member's age"
+            },
+            {
+                "columnName": "personalEmail",
+                "columnDescription": "Member's personal email address"
+            },
+            {
+                "columnName": "militaryEmail",
+                "columnDescription": "Member's military email address"
+            },
+            {
+                "columnName": "homeAddress",
+                "columnDescription": "Member's home address"
+            },
+            {
+                "columnName": "gender",
+                "columnDescription": "Member's gender"
+            },
+            {
+                "columnName": "personalTagline",
+                "columnDescription": "Member's personal tagline or motto"
+            },
+            {
+                "columnName": "jobtitle",
+                "columnDescription": "Member's job title"
+            },
+            {
+                "columnName": "awsS3Link",
+                "columnDescription": "Link to member's image stored on AWS S3"
+            },
+            {
+                "columnName": "completeGlideMemberUrl",
+                "columnDescription": "URL to member's profile on Glide"
+            },
+            {
+                "columnName": "hasconflict",
+                "columnDescription": "Indicates if the member has scheduling conflicts (0: No conflict, 1: Conflict)"
+            },
+            {
+                "columnName": "roles_Fk",
+                "columnDescription": "Foreign key to Roles table, ref: Roles.roles_id"
+            },
+            {
+                "columnName": "jobs_Fk",
+                "columnDescription": "Foreign key to Jobs table, ref: Jobs.jobs_id"
+            },
+            {
+                "columnName": "groups_Fk",
+                "columnDescription": "Foreign key to Groups table, ref: Groups.groups_id"
+            },
+            {
+                "columnName": "squadrons_Fk",
+                "columnDescription": "Foreign key to Squadrons table, ref: Squadrons.squadrons_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "M4Training",
+        "tableDescription": "Contains information about M4 training",
+        "columns": [
+            {
+                "columnName": "m4Training_id",
+                "columnDescription": "The unique identifier for the M4 training entry"
+            },
+            {
+                "columnName": "member",
+                "columnDescription": "The name of the member whose training it is"
+            },
+            {
+                "columnName": "completedDate",
+                "columnDescription": "The date when the M4 training was completed"
+            },
+            {
+                "columnName": "expirationDate",
+                "columnDescription": "The expiration date of the M4 training certification"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "The current status of the M4 training (e.g., Complete, Incomplete)"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "M240Training",
+        "tableDescription": "Contains information about M240 training",
+        "columns": [
+            {
+                "columnName": "m240Training_id",
+                "columnDescription": "The unique identifier for the M240 training entry"
+            },
+            {
+                "columnName": "member",
+                "columnDescription": "The name of the member whose training it is"
+            },
+            {
+                "columnName": "completedDate",
+                "columnDescription": "The date when the M240 training was completed"
+            },
+            {
+                "columnName": "expirationDate",
+                "columnDescription": "The expiration date of the M240 training certification"
+            },
+            {
+                "columnName": "status",
+                "columnDescription": "The current status of the M240 training (e.g., Complete, Incomplete)"
+            },
+            {
+                "columnName": "members_Fk",
+                "columnDescription": "Foreign key to Members, ref: Members.members_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Groups",
+        "tableDescription": "Contains information about groups",
+        "columns": [
+            {
+                "columnName": "groups_id",
+                "columnDescription": "The unique identifier for the group entry"
+            },
+            {
+                "columnName": "group",
+                "columnDescription": "The name of the group"
+            },
+            {
+                "columnName": "supervisorName",
+                "columnDescription": "The name of the group's supervisor"
+            },
+            {
+                "columnName": "groupReadinessStatus",
+                "columnDescription": "The readiness status of the group (e.g., Green, Red, Yellow)"
+            },
+            {
+                "columnName": "imageUrl",
+                "columnDescription": "The URL of the group's image"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "CommunicationsEquipment",
+        "tableDescription": "Contains information about communications equipment",
+        "columns": [
+            {
+                "columnName": "communicationsequipment_id",
+                "columnDescription": "The unique identifier for the communications equipment"
+            },
+            {
+                "columnName": "name",
+                "columnDescription": "The name of the communications equipment"
+            },
+            {
+                "columnName": "description",
+                "columnDescription": "A brief description of the communications equipment"
+            },
+            {
+                "columnName": "model",
+                "columnDescription": "The model of the communications equipment"
+            },
+            {
+                "columnName": "manufacturer",
+                "columnDescription": "The manufacturer of the communications equipment"
+            },
+            {
+                "columnName": "serialNumber",
+                "columnDescription": "The serial number of the communications equipment"
+            },
+            {
+                "columnName": "acquisitionDate",
+                "columnDescription": "The date when the communications equipment was acquired"
+            },
+            {
+                "columnName": "condition",
+                "columnDescription": "The current condition of the communications equipment"
+            },
+            {
+                "columnName": "lastMaintenanceDate",
+                "columnDescription": "The date when the communications equipment was last maintained"
+            },
+            {
+                "columnName": "nextMaintenanceDate",
+                "columnDescription": "The date when the next maintenance is scheduled for the communications equipment"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Members_Skills",
+        "tableDescription": "Junction table linking members and skills",
+        "columns": [
+            {
+                "columnName": "members_id",
+                "columnDescription": "Foreign Key to Members.Members_id, ID of the member",
+                "isPrimaryKey": true
+            },
+            {
+                "columnName": "skills_id",
+                "columnDescription": "Foreign Key to Skills.Skills_id, ID of the skill",
+                "isPrimaryKey": true
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Skills",
+        "tableDescription": "Contains information about skills",
+        "columns": [
+            {
+                "columnName": "skills_id",
+                "columnDescription": "The unique identifier for the skill entry"
+            },
+            {
+                "columnName": "skill",
+                "columnDescription": "The name of the skill (e.g., Aerospace Engineer, Aircraft Mechanic, Air Traffic Controller)"
+            },
+            {
+                "columnName": "source",
+                "columnDescription": "The source of the skill (e.g., Civilian, Military)"
+            },
+            {
+                "columnName": "type",
+                "columnDescription": "The type of credential or training associated with the skill (e.g., Certification, Education, Letter of Designation, License, Training)"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Jobs",
+        "tableDescription": "Contains information about jobs",
+        "columns": [
+            {
+                "columnName": "jobs_id",
+                "columnDescription": "The unique identifier for the job entry"
+            },
+            {
+                "columnName": "jobTitle",
+                "columnDescription": "The title of the job"
+            },
+            {
+                "columnName": "description",
+                "columnDescription": "A detailed description of the job responsibilities and duties"
+            },
+            {
+                "columnName": "squadrons_Fk",
+                "columnDescription": "Foreign key to Squadrons, ref: Squadrons.squadrons_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index for tracking updates"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    },
+    {
+        "tableName": "Squadrons",
+        "tableDescription": "Contains information about squadrons",
+        "columns": [
+            {
+                "columnName": "squadrons_id",
+                "columnDescription": "Unique identifier for each squadron"
+            },
+            {
+                "columnName": "squadron",
+                "columnDescription": "Name of the squadron"
+            },
+            {
+                "columnName": "supervisorName",
+                "columnDescription": "Name of the squadron's supervisor"
+            },
+            {
+                "columnName": "squadronReadinessStatus",
+                "columnDescription": "Readiness status of the squadron (Red, Yellow, Green)"
+            },
+            {
+                "columnName": "imageUrl",
+                "columnDescription": "URL to the squadron's image"
+            },
+            {
+                "columnName": "groups_Fk",
+                "columnDescription": "Foreign Key to Groups, ref: Groups.groups_id"
+            },
+            {
+                "columnName": "updated_idx",
+                "columnDescription": "Index of the last update"
+            }
+        ],
+        "schemaName": "ingestion_test"
+    }
+]

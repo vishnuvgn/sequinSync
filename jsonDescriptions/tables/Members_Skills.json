@@ -1,0 +1,17 @@
+{
+    "tableName": "Members_Skills",
+    "tableDescription": "Junction table linking members and skills",
+    "columns": [
+        {
+            "columnName": "members_id",
+            "columnDescription": "Foreign Key to Members.Members_id, ID of the member",
+            "isPrimaryKey": true
+        },
+        {
+            "columnName": "skills_id",
+            "columnDescription": "Foreign Key to Skills.Skills_id, ID of the skill",
+            "isPrimaryKey": true
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

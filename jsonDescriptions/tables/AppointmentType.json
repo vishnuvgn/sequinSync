@@ -1,0 +1,23 @@
+{
+    "tableName": "Appointmenttype",
+    "tableDescription": "Contains information about appointment types",
+    "columns": [
+        {
+            "columnName": "appointmenttype_id",
+            "columnDescription": "The unique identifier for the appointment type"
+        },
+        {
+            "columnName": "name",
+            "columnDescription": "The name of the appointment type"
+        },
+        {
+            "columnName": "durationMinutes",
+            "columnDescription": "The duration of the appointment in minutes"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

@@ -1,0 +1,35 @@
+{
+    "tableName": "Squadrons",
+    "tableDescription": "Contains information about squadrons",
+    "columns": [
+        {
+            "columnName": "squadrons_id",
+            "columnDescription": "Unique identifier for each squadron"
+        },
+        {
+            "columnName": "squadron",
+            "columnDescription": "Name of the squadron"
+        },
+        {
+            "columnName": "supervisorName",
+            "columnDescription": "Name of the squadron's supervisor"
+        },
+        {
+            "columnName": "squadronReadinessStatus",
+            "columnDescription": "Readiness status of the squadron (Red, Yellow, Green)"
+        },
+        {
+            "columnName": "imageUrl",
+            "columnDescription": "URL to the squadron's image"
+        },
+        {
+            "columnName": "groups_Fk",
+            "columnDescription": "Foreign Key to Groups, ref: Groups.groups_id"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index of the last update"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

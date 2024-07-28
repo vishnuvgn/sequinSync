@@ -1,0 +1,51 @@
+{
+    "tableName": "MaintenanceEquipment",
+    "tableDescription": "Contains information about maintenance equipment",
+    "columns": [
+        {
+            "columnName": "maintenanceequipment_id",
+            "columnDescription": "The unique identifier for the maintenance equipment entry"
+        },
+        {
+            "columnName": "name",
+            "columnDescription": "The name of the maintenance equipment"
+        },
+        {
+            "columnName": "description",
+            "columnDescription": "A description of the maintenance equipment"
+        },
+        {
+            "columnName": "model",
+            "columnDescription": "The model of the maintenance equipment"
+        },
+        {
+            "columnName": "manufacturer",
+            "columnDescription": "The manufacturer of the maintenance equipment"
+        },
+        {
+            "columnName": "serialNumber",
+            "columnDescription": "The serial number of the maintenance equipment"
+        },
+        {
+            "columnName": "acquisitionDate",
+            "columnDescription": "The date when the maintenance equipment was acquired"
+        },
+        {
+            "columnName": "condition",
+            "columnDescription": "The current condition of the maintenance equipment (e.g., Good, Fair, New)"
+        },
+        {
+            "columnName": "lastMaintenanceDate",
+            "columnDescription": "The date when the maintenance equipment was last maintained"
+        },
+        {
+            "columnName": "nextMaintenanceDate",
+            "columnDescription": "The date when the next maintenance is scheduled for the equipment"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}

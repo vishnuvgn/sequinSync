@@ -1,0 +1,51 @@
+{
+    "tableName": "CommunicationsEquipment",
+    "tableDescription": "Contains information about communications equipment",
+    "columns": [
+        {
+            "columnName": "communicationsequipment_id",
+            "columnDescription": "The unique identifier for the communications equipment"
+        },
+        {
+            "columnName": "name",
+            "columnDescription": "The name of the communications equipment"
+        },
+        {
+            "columnName": "description",
+            "columnDescription": "A brief description of the communications equipment"
+        },
+        {
+            "columnName": "model",
+            "columnDescription": "The model of the communications equipment"
+        },
+        {
+            "columnName": "manufacturer",
+            "columnDescription": "The manufacturer of the communications equipment"
+        },
+        {
+            "columnName": "serialNumber",
+            "columnDescription": "The serial number of the communications equipment"
+        },
+        {
+            "columnName": "acquisitionDate",
+            "columnDescription": "The date when the communications equipment was acquired"
+        },
+        {
+            "columnName": "condition",
+            "columnDescription": "The current condition of the communications equipment"
+        },
+        {
+            "columnName": "lastMaintenanceDate",
+            "columnDescription": "The date when the communications equipment was last maintained"
+        },
+        {
+            "columnName": "nextMaintenanceDate",
+            "columnDescription": "The date when the next maintenance is scheduled for the communications equipment"
+        },
+        {
+            "columnName": "updated_idx",
+            "columnDescription": "Index for tracking updates"
+        }
+    ],
+    "schemaName": "ingestion_test"
+}
