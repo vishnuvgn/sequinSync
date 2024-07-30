@@ -1,0 +1,6 @@
+# exclude everything that starts with a dot (.)
+.*
+__pycache__/
+
+# however, do include .env
+!.env

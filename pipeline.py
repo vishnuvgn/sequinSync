@@ -137,7 +137,7 @@ def run():
             if not has_more(info):
                 logging.info("No more messages to pull")#, sleeping for 5 seconds")
                 # global M2M_POPULATED, WAIT
-                global WAIT
+                global WAIT, M2M_MAPS
                 # if M2M_POPULATED == False and WAIT >= 15:
                 if WAIT >= 2:
                     # junctionTables is the tuple key for the dict
@@ -148,7 +148,7 @@ def run():
                             tbl1, tbl2 = junctionTables
                             # EX: "Members", "Skills", "mem1", ["skill1", "skill2"] (these will obviously be real upstream ids)
                             sql.populateJunctionTable(tbl1, tbl2, tbl1Id, tbl2Ids)
-                        global M2M_MAPS
+                        
                         del M2M_MAPS[junctionTables]
                     # M2M_POPULATED = True
                 else:
