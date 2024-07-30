@@ -1,7 +1,6 @@
 import extractFields, jsonFunctions
 import os, json
 
-
 TABLE_SEQUIN_SYNC_IDS = {
     "airtable:2szPY7DQDWxpueAyU4JT8OWQ": "Vehicle Equipment",
     "airtable:3X4IbiTRF9f03YjZakTicWEV": "Squadrons",
