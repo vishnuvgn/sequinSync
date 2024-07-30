@@ -23,9 +23,6 @@ TABLE_SEQUIN_SYNC_IDS = {
     "airtable:uG2YwEsUrEFVKk5KC4VnN8gh": "Groups"
 }
 
-
-
-
 '''
 Fields in use for each table mentioned above
 '''

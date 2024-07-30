@@ -17,7 +17,6 @@ def changeName(input_string, isField: bool):
     if isField == True:
         input_string = input_string[0].lower() + input_string[1:]
 
-    
     return input_string
 
 def createJunctionTableName(table1, table2):
