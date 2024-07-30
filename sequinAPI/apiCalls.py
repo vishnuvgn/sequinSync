@@ -1,5 +1,5 @@
 import requests, os, json
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 load_dotenv()
 
 
@@ -88,9 +88,9 @@ def resetConsumer(consumer_id, stream_id):
     # response = requests.request("POST", url, headers=headers)
     # return response.text
 
-
     deleteConsumer(consumer_id)
     new_consumer_id = createConsumer(stream_id)
+    set_key("../.env", "SEQUIN_CONSUMER_ID", new_consumer_id, quote_mode='never')
     return new_consumer_id
 
 def deleteConsumer(consumer_id):

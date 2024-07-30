@@ -185,17 +185,25 @@ def createJunctionTable(table1, table2):
 
     junction_table_name = formatName.createJunctionTableName(table1, table2)
 
+    # Query for safe insertion --> with constraints
+    # query = f'''
+    # CREATE TABLE IF NOT EXISTS "{junction_table_name}" (
+    #     "{table1_pk}" TEXT,
+    #     "{table2_pk}" TEXT,
+    #     PRIMARY KEY ("{table1_pk}", "{table2_pk}"),
+    #     FOREIGN KEY ("{table1_pk}") REFERENCES "{table1}"("{table1_pk}") ON DELETE CASCADE,
+    #     FOREIGN KEY ("{table2_pk}") REFERENCES "{table2}"("{table2_pk}") ON DELETE CASCADE
+    # );
+    # '''
     
     query = f'''
     CREATE TABLE IF NOT EXISTS "{junction_table_name}" (
         "{table1_pk}" TEXT,
         "{table2_pk}" TEXT,
-        PRIMARY KEY ("{table1_pk}", "{table2_pk}"),
-        FOREIGN KEY ("{table1_pk}") REFERENCES "{table1}"("{table1_pk}") ON DELETE CASCADE,
-        FOREIGN KEY ("{table2_pk}") REFERENCES "{table2}"("{table2_pk}") ON DELETE CASCADE
+        PRIMARY KEY ("{table1_pk}", "{table2_pk}")
     );
     '''
-    
+
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
     cur.execute(query)
     print(f'created {junction_table_name}')
@@ -229,7 +237,6 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
     conn.commit()
     cur.close()
     conn.close()
-
 
 # be fucking careful
 def deleteTable(table):

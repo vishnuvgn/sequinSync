@@ -32,13 +32,13 @@ cur = conn.cursor()
 
 # TODO: will write explanation. this is important
 # {
-#     (memberTable, skillTable) :{
+#     (memberTable, skillTable) : {
 #         "mem1" : ["skill1", "skill2"]
 #     }
 # }
 
 M2M_MAPS = {}
-M2M_POPULATED = False
+# M2M_POPULATED = False
 WAIT = 0
 
 
@@ -113,24 +113,9 @@ def upsert_record(record):
     # print(f'values = {values}')
     
     query = sql.writeQuery(sqlTable, PGCols)
-    # print(query)
-
-
-    # # print(f'fields = {fields}')
-    # fields.append(upstream_id)
-    # fields.append(updated_idx)
-
-
-    
-    # query = sql.writeQuery(sqlTable)
-    # print(f'query = {query}')
     
     cur.execute(f"SET search_path TO {PG_SCHEMA}")
-
-    # Execute the query with the record data
     cur.execute(query, values)
-
-    # Commit the transaction
     conn.commit()
 
 def run():
@@ -151,17 +136,21 @@ def run():
             # If there are no more messages to pull, wait for 5 seconds before trying again
             if not has_more(info):
                 logging.info("No more messages to pull")#, sleeping for 5 seconds")
-                global M2M_POPULATED, WAIT
-                if M2M_POPULATED == False and WAIT >= 15:
+                # global M2M_POPULATED, WAIT
+                global WAIT
+                # if M2M_POPULATED == False and WAIT >= 15:
+                if WAIT >= 2:
                     # junctionTables is the tuple key for the dict
-                    for junctionTables, recordMap in M2M_MAPS.items():
+                    for junctionTables, recordMap in list(M2M_MAPS.items()):
                         # tbl1Id is the upstream_id of the record in the main table
                         # tbl2Ids is a list of upstream_ids of the records in the ref table
                         for tbl1Id, tbl2Ids in recordMap.items():
                             tbl1, tbl2 = junctionTables
                             # EX: "Members", "Skills", "mem1", ["skill1", "skill2"] (these will obviously be real upstream ids)
                             sql.populateJunctionTable(tbl1, tbl2, tbl1Id, tbl2Ids)
-                    M2M_POPULATED = True
+                        global M2M_MAPS
+                        del M2M_MAPS[junctionTables]
+                    # M2M_POPULATED = True
                 else:
                     WAIT += 1
                     logging.info("sleeping for 5 seconds")
