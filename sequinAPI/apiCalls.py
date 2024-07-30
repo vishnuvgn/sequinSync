@@ -1,4 +1,4 @@
-import requests, os, json
+import requests, os, json, sys
 from dotenv import load_dotenv, set_key
 load_dotenv()
 
@@ -29,6 +29,7 @@ def listSyncs(stream_id=None):
     for sync in syncs:
         # print(sync['id'])
         sync_ids.append(sync['id'])
+    print(sync_ids)
     return sync_ids
 
 def createSync(stream_id):
@@ -71,6 +72,7 @@ def listConsumers():
     for consumer in consumers:
         # print(consumer['id'])
         consumer_ids.append(consumer['id'])
+    print(consumer_ids)
     return consumer_ids
 
 def createConsumer(stream_id):
@@ -91,6 +93,7 @@ def resetConsumer(consumer_id, stream_id):
     deleteConsumer(consumer_id)
     new_consumer_id = createConsumer(stream_id)
     set_key("../.env", "SEQUIN_CONSUMER_ID", new_consumer_id, quote_mode='never')
+    print(new_consumer_id)
     return new_consumer_id
 
 def deleteConsumer(consumer_id):
@@ -107,6 +110,7 @@ def listStreams():
     response = requests.request("GET", url, headers=headers)
     streams = response.json()
     print(streams)
+    return streams
 
 def createStream():
     url = "https://api.sequin.io/v1/streams"
@@ -115,3 +119,21 @@ def createStream():
     response = requests.request("POST", url, headers=headers, json=payload)
     stream_id = response.json()['data']['id']
     return stream_id
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python3 apiCalls.py <function_name> [arguments...]")
+        sys.exit(1)
+
+    function_name = sys.argv[1]
+    arguments = sys.argv[2:]
+
+    if function_name == "listStreams":
+        listStreams()
+    elif function_name == "listConsumers":
+        listConsumers()
+    elif function_name == "resetConsumer":
+        resetConsumer(*arguments)
+    elif function_name == "listSyncs":
+        listSyncs(*arguments)
