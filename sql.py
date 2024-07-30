@@ -11,7 +11,7 @@ PG_PASSWORD=os.getenv('PG_PASSWORD')
 PG_SCHEMA=os.getenv('PG_SCHEMA')
 
 def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS): 
-    foreignKeyCountMap = {} # dictionary of tables with the same number of foreign keys ex: {1: [table1, table2, table3], 2: [table4, table5]}
+    # foreignKeyCountMap = {} # dictionary of tables with the same number of foreign keys ex: {1: [table1, table2, table3], 2: [table4, table5]}
     foreignKeyMap = {} 
     at_pg_map = {}
     pg_table_fields = {}
@@ -42,10 +42,10 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
 
             pgFields.append(pgFieldName)
         
-        if fkCount in foreignKeyCountMap:
-            foreignKeyCountMap[fkCount].append(pgTable)
-        else:
-            foreignKeyCountMap[fkCount] = [pgTable]
+        # if fkCount in foreignKeyCountMap:
+        #     foreignKeyCountMap[fkCount].append(pgTable)
+        # else:
+        #     foreignKeyCountMap[fkCount] = [pgTable]
         
         at_pg_map[airTable] = pgTable
         pg_table_fields[pgTable] = pgFields
@@ -63,7 +63,7 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
     jsonFunctions.overwrite_json("AirtablePGTableMap.json", at_pg_map) # airtable to pg table
     jsonFunctions.overwrite_json("PostgresTableFields.json", pg_table_fields)
     jsonFunctions.overwrite_json("PostgresForeignKeyMap.json", foreignKeyMap)
-    jsonFunctions.overwrite_json("ForeignKeyCountMap.json", foreignKeyCountMap)
+    # jsonFunctions.overwrite_json("ForeignKeyCountMap.json", foreignKeyCountMap)
 
 
 PG_TABLE_FIELDS = json.load(open("PostgresTableFields.json"))
@@ -80,12 +80,12 @@ def createFKRelation(fkDict, fkTable, fkField, fkReferenceTable):
     else:
         fkDict[fkTable][fkField] = f'"{fkReferenceTable}"("{pkOfReference}")'
      
-# with parameter because expecting to use it in a pipeline.py
-def sortTables(foreignKeyCountMap):
-    sortedTables = []
-    for count in sorted(foreignKeyCountMap.keys()):
-        sortedTables += foreignKeyCountMap[count]
-    return sortedTables
+# # with parameter because expecting to use it in a pipeline.py
+# def sortTables(foreignKeyCountMap):
+#     sortedTables = []
+#     for count in sorted(foreignKeyCountMap.keys()):
+#         sortedTables += foreignKeyCountMap[count]
+#     return sortedTables
 
 
 '''
@@ -152,14 +152,6 @@ def createTable(table):
         if i == 0:
             prefix = ""
     
-    # if the last two letters of the field is Pk, then it is a primary key
-        # if field[-2:] == "Pk":
-        #     query += f'{prefix}"{field}" TEXT'# PRIMARY KEY'
-
-        # # elif field[-2:] == "Fk":
-        # #     query += f'{prefix}"{field}" TEXT, '
-        # #     query += f'FOREIGN KEY ("{field}") REFERENCES {PG_FOREIGN_KEYS[table][field]}'
-
         if field == "updated_idx":
             query += f'{prefix}"{field}" BIGINT'
 

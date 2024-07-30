@@ -82,16 +82,16 @@ def createConsumer(stream_id):
     return consumer_id
 
 def resetConsumer(consumer_id, stream_id):
-    deleteConsumer(consumer_id)
-    new_consumer_id = createConsumer(stream_id)
-    return new_consumer_id
-    
-    
     # url = f"https://api.sequin.io/v1/http-consumers/{consumer_id}/reset"
     # headers = {"Authorization" : f"Bearer {SEQUIN_API_KEY}", "Content-Type" : "application/json"}
 
     # response = requests.request("POST", url, headers=headers)
     # return response.text
+
+
+    deleteConsumer(consumer_id)
+    new_consumer_id = createConsumer(stream_id)
+    return new_consumer_id
 
 def deleteConsumer(consumer_id):
     url = f"https://api.sequin.io/v1/http-consumers/{consumer_id}"
