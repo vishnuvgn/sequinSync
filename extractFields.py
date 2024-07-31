@@ -5,10 +5,20 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+# additional imports needed for linux vm:
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+
 # time.sleep(random.randint(a, b)) is called in some places so that suspicious activity is (hopefully!) not detected
 
+def initiateRemote():
+    options = FirefoxOptions()
+    options.add_argument('--headless')  # Run in headless mode
+    gecko_path = '/snap/bin/geckodriver'
+    driver = webdriver.Firefox(service=FirefoxService(gecko_path), options=options)
+    return driver
 
-def initiate():
+def initiateLocal():
     driver = webdriver.Safari()
     return driver
 
@@ -71,7 +81,12 @@ def get_column_names(driver):
 
 def compileFieldList(table_urls):
     table_fields = {}
-    d = initiate()
+    
+    
+    d = initiateLocal()
+    # d = initiateRemote()
+    
+    
     for table, url in table_urls.items():
         time.sleep(random.randint(3, 5))
         d = login(d, url)
@@ -80,3 +95,5 @@ def compileFieldList(table_urls):
 
     # print(table_fields)
     return table_fields
+
+compileFieldList({"Members" : "https://airtable.com/app03GWdFHFCFlo9u/tblyIeCi2GxlIAG49/viwRpq5VEnQboWjJV?blocks=hide"})

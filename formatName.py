@@ -13,7 +13,6 @@ def changeName(input_string, isField: bool):
     # Replace spaces with empty string
     input_string = input_string.replace(" ", "")
 
-
     if isField == True:
         input_string = input_string[0].lower() + input_string[1:]
 

@@ -1,5 +1,4 @@
 import airtables, sql, formatName
-
 import time
 import logging
 logging.basicConfig(level=logging.INFO)

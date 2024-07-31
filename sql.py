@@ -1,6 +1,6 @@
 import psycopg2
 from dotenv import load_dotenv
-import os, json
+import os, json, sys
 import formatName, jsonFunctions, airtables # i dont like this structure all that much...
 
 load_dotenv()
@@ -178,8 +178,7 @@ def createJunctionTable(table1, table2):
         password=PG_PASSWORD
     )
     cur = conn.cursor()
-
-    
+  
     table1_pk = formatName.createPrimaryKey(table1)
     table2_pk = formatName.createPrimaryKey(table2)
 
@@ -269,7 +268,6 @@ def createTables():
     tbls = list(PG_TABLE_FIELDS.keys())
     for tbl in tbls:
         createTable(tbl)
-
 
 def unlinkTables():
     conn = psycopg2.connect(
