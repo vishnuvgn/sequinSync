@@ -50,21 +50,24 @@ TABLE_URLS = {
 
 
 def fillTableFields(overwrite=True): 
+    whichServer = input("Local or Remote? ")
     # selenium can be stupid sometimes... works sometimes, doesn't work other times
     completed = False
     while completed == False:
         try: 
-            tableFields = extractFields.compileFieldList(TABLE_URLS)
+            # tableFields = extractFields.compileFieldList(TABLE_URLS)
+            tableFields = extractFields.compileFieldList(TABLE_URLS, whichServer)
         except:
             print("will try again")
         else:
             completed = True
+    #FIXME, temporary
+    # if overwrite:
+    #     jsonFunctions.overwrite_json("AirTableFields.json", tableFields)
+    # else:
+    #     for table, fields in tableFields.items():
+    #         jsonFunctions.append_to_json("AirTableFields.json", table, fields)
 
-    if overwrite:
-        jsonFunctions.overwrite_json("AirTableFields.json", tableFields)
-    else:
-        for table, fields in tableFields.items():
-            jsonFunctions.append_to_json("AirTableFields.json", table, fields)
-
-
-AT_TABLE_FIELDS = json.load(open("AirTableFields.json"))
+    print(tableFields)
+# AT_TABLE_FIELDS = json.load(open("AirTableFields.json"))
+fillTableFields()
