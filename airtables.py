@@ -1,5 +1,9 @@
 import extractFields, jsonFunctions
-import os, json
+import os, json, shutil
+from dotenv import load_dotenv
+load_dotenv()
+
+CSV_DIR = os.getenv('VM_CSVS_PATH')
 
 TABLE_SEQUIN_SYNC_IDS = {
     "airtable:2szPY7DQDWxpueAyU4JT8OWQ": "Vehicle Equipment",
@@ -48,9 +52,22 @@ TABLE_URLS = {
   "Skills" : "https://airtable.com/app03GWdFHFCFlo9u/tblUczxW6cEIp6Hv1/viwU9EtFwgzGHSzKA?blocks=hide"
 }
 
+def clear_directory(dir_path):
+    for filename in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
 
 def fillTableFields(overwrite=True): 
     whichServer = input("Local or Remote? ")
+    if whichServer == "Remote" or whichServer == "remote" or whichServer == "r":
+        clear_directory(CSV_DIR)
     # selenium can be stupid sometimes... works sometimes, doesn't work other times
     completed = False
     while completed == False:

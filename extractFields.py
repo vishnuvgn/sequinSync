@@ -7,6 +7,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+CSV_DIR = os.getenv('VM_CSVS_PATH')
+
 
 # additional imports needed for linux vm:
 from selenium.webdriver.firefox.service import Service as FirefoxService
@@ -20,7 +22,7 @@ def initiateLocal():
     return driver
 
 def initiateRemote():
-    download_directory = '/home/workmerk/sequinSync/csvs'
+    download_directory = CSV_DIR
 
     options = FirefoxOptions()
 
@@ -92,6 +94,12 @@ def get_column_names(driver):
     return fields
 
 def download(driver):
+    download_directory = CSV_DIR
+    # Record existing files
+    existing_files = set(os.listdir(download_directory))
+    print(existing_files)
+
+
     controlBar = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '.viewSwitcherContainer > div:nth-child(1)')))
     print("controlBar found")
     syncFieldsBtn = WebDriverWait(driver, 10).until(
@@ -108,8 +116,24 @@ def download(driver):
     downloadBtn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[2]/div[36]/ul/li[10]/span')))
     print("downloadBtn found")
     # downloadBtn.click()
+    time.sleep(2)
     driver.execute_script("arguments[0].click();", downloadBtn)
     print("downloadBtn clicked")
+
+    new_files = set(os.listdir(download_directory)) - existing_files
+    while not new_files:
+        time.sleep(1)
+        new_files = set(os.listdir(download_directory)) - existing_files
+
+    new_file = new_files.pop()
+    while new_file.endswith(".part"):
+        time.sleep(1)
+        new_files = set(os.listdir(download_directory)) - existing_files
+        if new_files:
+            new_file = new_files.pop()
+
+    file_path = os.path.join(CSV_DIR, new_file)
+    return file_path
 
 def compileFieldList(table_urls, whichServer):
     table_fields = {}
@@ -126,11 +150,8 @@ def compileFieldList(table_urls, whichServer):
         for table, url in table_urls.items():
             time.sleep(random.randint(3, 5))
             driver = login(driver, url)
-            download(driver)
-            fp = table + "-Sync Fields.csv" # FIXME: This is a temporary solution
-            print(fp)
+            fp = download(driver)
             fields = extract_header_from_csv(fp)
-            print("Fields: ",fields)
             table_fields[table] = fields
         
 
@@ -140,7 +161,6 @@ def compileFieldList(table_urls, whichServer):
     return table_fields
 
 def extract_header_from_csv(file_path):
-    file_path = os.path.join("/home/workmerk/sequinSync/csvs", file_path)
     with open(file_path, newline='') as file:
         reader = csv.reader(file)
         header_row = next(reader, [])  # Returns an empty list if file is empty or no header row
