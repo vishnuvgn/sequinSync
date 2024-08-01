@@ -1,5 +1,5 @@
 import extractFields, jsonFunctions
-import os, json, shutil
+import os, shutil
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,7 +30,7 @@ TABLE_SEQUIN_SYNC_IDS = {
 Fields in use for each table mentioned above
 '''
 
-# human input -- all views are titled Sync Fields
+# human input -- all views are titled SyncFields
 TABLE_URLS = {
   "Members" : "https://airtable.com/app03GWdFHFCFlo9u/tblyIeCi2GxlIAG49/viwRpq5VEnQboWjJV?blocks=hide", 
   "Requirements" : "https://airtable.com/app03GWdFHFCFlo9u/tblekjtTS5jgzlaOf/viwzYSqVBFQHj3VI0?blocks=hide",
@@ -76,19 +76,14 @@ def fillTableFields(overwrite=True):
     while completed == False:
         try: 
             # tableFields = extractFields.compileFieldList(TABLE_URLS)
-            tableFields = extractFields.compileFieldList(TABLE_URLS, whichServer)
-            
+            tableFields = extractFields.compileFieldList(TABLE_URLS, whichServer) 
         except:
             print("will try again")
         else:
             completed = True
-    #FIXME, temporary
-    # if overwrite:
-    #     jsonFunctions.overwrite_json("AirTableFields.json", tableFields)
-    # else:
-    #     for table, fields in tableFields.items():
-    #         jsonFunctions.append_to_json("AirTableFields.json", table, fields)
-
-    print(tableFields)
-# AT_TABLE_FIELDS = json.load(open("AirTableFields.json"))
-fillTableFields()
+    if overwrite:
+        jsonFunctions.overwrite_json("AirTableFields.json", tableFields)
+    else:
+        for table, fields in tableFields.items():
+            jsonFunctions.append_to_json("AirTableFields.json", table, fields)
+    return "done"

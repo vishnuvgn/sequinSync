@@ -1,11 +1,8 @@
 import airtables, sql, formatName
-import time
-import logging
+import time, json, logging, os, requests
 logging.basicConfig(level=logging.INFO)
-import requests
 
 from dotenv import load_dotenv
-import os
 import psycopg2
 
 load_dotenv()
@@ -57,18 +54,20 @@ def upsert_record(record):
     #     with open("error.txt", "w") as f:
     #         f.write(f'Squadrons: {record}')
     # print(airtableTable)
-    sqlTable = sql.AIRTABLE_TO_SQL_MAP[airtableTable]
+    airtable2sqlMap = json.load(open("AirtablePGTableMap.json"))
+    sqlTable = airtable2sqlMap[airtableTable]
     
     # these two are inputed in every table
     upstream_id = record["upstream_id"] # (string) primary key, record key in airtable
     updated_idx = record["updated_idx"] # bigint
 
-    airtableFields = airtables.AT_TABLE_FIELDS[airtableTable]
+    airtableTableFieldsMap = json.load(open("AirtablePGTableMap.json"))
+    airtableFields = airtableTableFieldsMap[airtableTable]
 
     fieldsSent = record["data"]["fields"].keys()
     # print(fieldsSent)
-
-    pgTablePk = formatName.changeName(sqlTable, True) + "_id" # upstream_id val will go here
+    
+    pgTablePk = formatName.createPrimaryKey(sqlTable) # upstream_id val will go here
     PGCols = [pgTablePk, "updated_idx"]
 
     values = (upstream_id, updated_idx)

@@ -67,7 +67,6 @@ def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS):
 
 
 PG_TABLE_FIELDS = json.load(open("PostgresTableFields.json"))
-AIRTABLE_TO_SQL_MAP = json.load(open("AirtablePGTableMap.json"))
 PG_FOREIGN_KEYS = json.load(open("PostgresForeignKeyMap.json"))
 
 # fkTable: Represents the table that contains the foreign key.
@@ -330,3 +329,22 @@ def clearTables():
 def restart():
     deleteTables()
     createTables()
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Usage: python script.py <function_name> [<args>...]")
+        sys.exit(1)
+
+    function_name = sys.argv[1]
+    function_args = sys.argv[2:]
+
+    if function_name in globals():
+        func = globals()[function_name]
+        # Check if the function requires arguments
+        if func.__code__.co_argcount > 0:
+            func(*function_args)  # Unpack arguments as separate positional arguments
+        else:
+            func()  # Call function without arguments
+    else:
+        print(f"Function {function_name} not found in script.")
+        sys.exit(1)
