@@ -36,7 +36,6 @@ def initiateRemote():
     driver = webdriver.Firefox(service=FirefoxService(gecko_path), options=options)
     return driver
 
-
 def login(driver, url):
     
     print(driver)
@@ -137,7 +136,7 @@ def download(driver):
 
 def compileFieldList(table_urls, whichServer):
     table_fields = {}
-    if whichServer == "Local" or whichServer == "local" or whichServer == "l":
+    if whichServer == "local" or whichServer == "l":
         driver = initiateLocal()
         for table, url in table_urls.items():
             time.sleep(random.randint(3, 5))
@@ -145,7 +144,7 @@ def compileFieldList(table_urls, whichServer):
             fields = get_column_names(driver)
             table_fields[table] = fields
 
-    else:
+    elif whichServer == "remote" or whichServer == "r":
         driver = initiateRemote()
         for table, url in table_urls.items():
             time.sleep(random.randint(3, 5))
@@ -153,8 +152,6 @@ def compileFieldList(table_urls, whichServer):
             fp = download(driver)
             fields = extract_header_from_csv(fp)
             table_fields[table] = fields
-        
-
 
     # print(table_fields)
     driver.quit()

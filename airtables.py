@@ -65,15 +65,19 @@ def clear_directory(dir_path):
 
 
 def fillTableFields(overwrite=True): 
-    whichServer = input("Local or Remote? ")
-    if whichServer == "Remote" or whichServer == "remote" or whichServer == "r":
+    whichServer = input("Local or Remote? ").lower()
+    if whichServer in ["remote", "r"]:
         clear_directory(CSV_DIR)
+    elif whichServer not in ["local", "l"]:
+        print("Invalid input")
+        return "Invalid input"
     # selenium can be stupid sometimes... works sometimes, doesn't work other times
     completed = False
     while completed == False:
         try: 
             # tableFields = extractFields.compileFieldList(TABLE_URLS)
             tableFields = extractFields.compileFieldList(TABLE_URLS, whichServer)
+            
         except:
             print("will try again")
         else:
