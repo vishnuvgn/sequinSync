@@ -10,7 +10,7 @@ PG_USER=os.getenv('PG_USER')
 PG_PASSWORD=os.getenv('PG_PASSWORD')
 PG_SCHEMA=os.getenv('PG_SCHEMA')
 
-def mapAirtableToSQL(tables = json.load(open("AirtableFields.json"))): 
+def mapAirtableToSQL(tables = json.load(open("AirTableFields.json"))): 
     # foreignKeyCountMap = {} # dictionary of tables with the same number of foreign keys ex: {1: [table1, table2, table3], 2: [table4, table5]}
     foreignKeyMap = {} 
     at_pg_map = {}
