@@ -55,13 +55,14 @@ def upsert_record(record):
     #         f.write(f'Squadrons: {record}')
     # print(airtableTable)
     airtable2sqlMap = json.load(open("AirtablePGTableMap.json"))
+    
     sqlTable = airtable2sqlMap[airtableTable]
     
     # these two are inputed in every table
     upstream_id = record["upstream_id"] # (string) primary key, record key in airtable
     updated_idx = record["updated_idx"] # bigint
 
-    airtableTableFieldsMap = json.load(open("AirtablePGTableMap.json"))
+    airtableTableFieldsMap = json.load(open("AirTableFields.json"))
     airtableFields = airtableTableFieldsMap[airtableTable]
 
     fieldsSent = record["data"]["fields"].keys()
