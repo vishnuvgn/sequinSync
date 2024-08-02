@@ -10,7 +10,7 @@ PG_USER=os.getenv('PG_USER')
 PG_PASSWORD=os.getenv('PG_PASSWORD')
 PG_SCHEMA=os.getenv('PG_SCHEMA')
 
-def mapAirtableToSQL(tables = airtables.AT_TABLE_FIELDS): 
+def mapAirtableToSQL(tables = json.load(open("AirtableFields.json"))): 
     # foreignKeyCountMap = {} # dictionary of tables with the same number of foreign keys ex: {1: [table1, table2, table3], 2: [table4, table5]}
     foreignKeyMap = {} 
     at_pg_map = {}
@@ -332,7 +332,7 @@ def restart():
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python script.py <function_name> [<args>...]")
+        print("Usage: python3 script.py <function_name> [<args>...]")
         sys.exit(1)
 
     function_name = sys.argv[1]
