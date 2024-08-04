@@ -213,14 +213,16 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
     table2_pk = formatName.createPrimaryKey(table2)
 
     for table2Id in table2Ids:
-
         query = f'''
         INSERT INTO "{junction_table_name}" ("{table1_pk}", "{table2_pk}")
-        VALUES ('{table1Id}', '{table2Id}')
+        VALUES (%s, %s)
+        ON CONFLICT ("{table1_pk}", "{table2_pk}")
+        DO UPDATE SET "{table1_pk}" = EXCLUDED."{table1_pk}", "{table2_pk}" = EXCLUDED."{table2_pk}"
         '''
         
         cur.execute(f"SET search_path TO {PG_SCHEMA}")
-        cur.execute(query)
+        cur.execute(query, (table1Id, table2Id))
+
 
     print(f'populated {junction_table_name}')
     conn.commit()
