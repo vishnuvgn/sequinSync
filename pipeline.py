@@ -40,7 +40,7 @@ WAIT = 0
 
 
 def upsert_record(record):
-    # print(record)
+    print(record)
     
     # think more about the implication of this "ignore" logic
     # was a short term fix but could be a potential solution
