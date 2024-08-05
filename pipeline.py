@@ -174,7 +174,6 @@ def pull_messages(consumer_id):
 def process_messages(messages):
     records = []
     for message in messages:
-        print(message)
         records.append(message["record"])
     upsert_records(records)
         
