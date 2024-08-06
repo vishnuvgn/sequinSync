@@ -200,6 +200,55 @@ def createJunctionTable(table1, table2):
     cur.close()
     conn.close()
 
+# only checking first part of pk tuple
+def countRows(table, searchPk, searchId):
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
+    query = f'''
+    SELECT COUNT(*) 
+    FROM "{table}"  
+    WHERE "{searchPk}" = %s;
+    '''
+    
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+    cur.execute(query, (searchId,)) # has to be a single element tuple
+    
+    count = cur.fetchone()[0]
+    
+    cur.close()
+    conn.close()
+    
+    return count
+
+def deleteRows(table, searchPk, searchId):
+    conn = psycopg2.connect(
+        host=PG_HOST,
+        database=PG_DATABASE,
+        user=PG_USER,
+        password=PG_PASSWORD
+    )
+    cur = conn.cursor()
+    
+    # Define the delete query
+    query = f'''
+    DELETE FROM "{table}"
+    WHERE "{searchPk}" = %s;
+    '''
+    
+    cur.execute(f"SET search_path TO {PG_SCHEMA}")
+    cur.execute(query, (searchId,))  # has to be a single element tuple
+    
+    conn.commit()  
+    
+    cur.close()
+    conn.close()
+
+
 def populateJunctionTable(table1, table2, table1Id, table2Ids):
     conn = psycopg2.connect(
         host=PG_HOST,
@@ -212,6 +261,21 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
     table1_pk = formatName.createPrimaryKey(table1)
     table2_pk = formatName.createPrimaryKey(table2)
 
+    skillCountPG = countRows(junction_table_name, table1_pk, table1Id)
+    skillCountAT = len(table2Ids)
+
+    if skillCountPG == skillCountAT:
+        print("no skills added or removed")
+        conn.commit()
+        cur.close()
+        conn.close()
+        return
+
+    # skill(s) removed
+    elif skillCountPG > skillCountAT:
+        deleteRows(junction_table_name, table1_pk, table1Id)
+
+    
     for table2Id in table2Ids:
         query = f'''
         INSERT INTO "{junction_table_name}" ("{table1_pk}", "{table2_pk}")
@@ -228,6 +292,7 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
     conn.commit()
     cur.close()
     conn.close()
+    return
 
 # be fucking careful
 def deleteTable(table):

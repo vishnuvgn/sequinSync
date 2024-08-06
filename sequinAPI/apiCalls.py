@@ -11,8 +11,9 @@ def getCredential():
     url = "https://api.sequin.io/v1/credentials/0d5cf3d1-12a1-4795-a235-4e60c561493b"
     headers = {"Authorization": f"Bearer {SEQUIN_API_KEY}"}
     response = requests.request("GET", url, headers=headers)
-    credential = response.json()
-    return credential["properties"]
+    return response.text
+    # credential = response.json()
+    # return credential["properties"]
 
 # SYNC FUNCTIONS
 
@@ -35,20 +36,20 @@ def listSyncs(stream_id=None):
 def createSync(stream_id):
     url = "https://api.sequin.io/v1/syncs"
     headers = {"Authorization": f"Bearer {SEQUIN_API_KEY}", "Content-Type": "application/json"}
-    file = open("airtable_sequin_sync_ids.json", "r")
+    # file = open("airtable_sequin_sync_ids.json", "r")
     payload = {
+        "provider" : "airtable",
         "stream_id": stream_id,
         "name": "Airtable Sync",
-        "collection_ids": json.loads(file),
-        "credential": {
-            "properties": getCredential()
-        } 
-    }
+        "collection_ids": ['airtable:gcSyR6LfxbXo7iART4m1vcLu', 'airtable:eujMtBaNfSAsMvI2kF7F2nSi', 'airtable:NpJbSblRDdKgJosRbZSBCtve', 'airtable:NkmWXvTPqbybAkcE4IGm0dn6', 'airtable:G4imjysVDOOH5ofUbCWwXryx', 'airtable:f4eki9HRwU2imQWdDnFJV7rS', 'airtable:3X4IbiTRF9f03YjZakTicWEV', 'airtable:dVa6dpvaGo9saVuXuN3hrjxJ', 'airtable:Zj1i1yilXiqXjgJfTOtq3BdD', 'airtable:uG2YwEsUrEFVKk5KC4VnN8gh', 'airtable:eHqBtzxb7xC1pYcfrcZf3j1G', 'airtable:2szPY7DQDWxpueAyU4JT8OWQ', 'airtable:QRjRBK74dypRkjVNxSMSac29', 'airtable:NiSyJM9Od17YXRObYJwlzWr2', 'airtable:6su7Wmk9nQYYgiYtDZ82LXgi', 'airtable:EbxuQyg8nltoV4AaWf4ZzoFY', 'airtable:s9lQTLDSVZeTxaLOD5KU8jAP', 'airtable:GdI0mjcwUsdjxg49DBPU5yih', 'airtable:K71pCFJE5gmXYnNf81eBCJKa'],
+        "credential_id" : "0d5cf3d1-12a1-4795-a235-4e60c561493b",
+        "max_age_days" : 7
+    }   
 
     response = requests.request("POST", url, headers=headers, json=payload)
-    print(response.status_code)
+    print(response.text)
 
-    file.close()
+    # file.close() airtable:97GJsnvkaOhooMCsDgBBYUd7
 
 def deleteSync(sync_id):
     url = f"https://api.sequin.io/v1/syncs/{sync_id}"
@@ -56,6 +57,38 @@ def deleteSync(sync_id):
 
     response = requests.request("DELETE", url, headers=headers)
     return response.status_code
+
+
+def listCollections(credential_id="0d5cf3d1-12a1-4795-a235-4e60c561493b"):
+
+    url = f"https://api.sequin.io/v1/collections/{credential_id}"
+
+    headers = {"Authorization": f"Bearer {SEQUIN_API_KEY}"}
+
+    response = requests.request("GET", url, headers=headers)
+    data = response.json()
+
+    # Write the data to a JSON file
+    with open('collections.json', 'w') as file:
+        json.dump(data, file, indent=4)
+    return data
+
+def getTableIds():
+    # Load collections from the JSON file
+    with open('collections.json', 'r') as file:
+        collections = json.load(file)
+    
+    # Load AirTable fields from the JSON file
+    with open('/Users/vishnuvenugopal/Downloads/sequinSync/AirTableFields.json', 'r') as file:
+        ats = json.load(file).keys()
+    
+    # Extract table IDs from the collections
+    tables = collections['data']
+    tblIds = [tbl['id'] for tbl in tables if tbl['name'] in ats]
+    
+    print(tblIds)
+
+
 
 # CONSUMER FUNCTIONS
 
