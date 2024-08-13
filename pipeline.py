@@ -47,13 +47,10 @@ def upsert_record(record):
     if record["collection_id"] not in airtables.TABLE_SEQUIN_SYNC_IDS:
         return
     
+
     # keys of the mapping table have to be the records expected in the sync
     airtableTable = airtables.TABLE_SEQUIN_SYNC_IDS[record["collection_id"]] 
-    # if airtableTable == "Squadrons":
-    #     print("Squadrons")
-    #     with open("error.txt", "w") as f:
-    #         f.write(f'Squadrons: {record}')
-    # print(airtableTable)
+
     airtable2sqlMap = json.load(open("AirtablePGTableMap.json"))
     
     sqlTable = airtable2sqlMap[airtableTable]
@@ -61,6 +58,10 @@ def upsert_record(record):
     # these two are inputed in every table
     upstream_id = record["upstream_id"] # (string) primary key, record key in airtable
     updated_idx = record["updated_idx"] # bigint
+
+    if record['deleted'] == True:
+        sql.deleteRows(sqlTable, formatName.createPrimaryKey(sqlTable), upstream_id)
+        return
 
     airtableTableFieldsMap = json.load(open("AirTableFields.json"))
     airtableFields = airtableTableFieldsMap[airtableTable]
@@ -108,6 +109,34 @@ def upsert_record(record):
                 # print(f'PGField = {PGField}')
                 PGCols.append(PGField)
             
+    fieldsNotSent = list(set(airtableFields) - set(fieldsSent)) # these are the fields in sync fields that are not sent because they are blank
+    for field in fieldsNotSent:
+
+        M2M_flag = False
+        # TODO -- eventually change these from empty strings to NULL values
+        if field[-3:] == "M2M": # value is a list
+            M2M_flag = True
+            print(f'found M2M: {field}')
+            refTable = field[:-4] # has to be spelled right in airtable
+            junctionTables = (sqlTable, formatName.changeName(refTable, False)) # tuple is key in dict
+            if junctionTables not in M2M_MAPS:
+                M2M_MAPS[junctionTables] = {
+                    upstream_id : [] # blank bc it has been deleted
+                }
+            else:
+                M2M_MAPS[junctionTables][upstream_id] = [] # blank bc it has been deleted
+
+        
+        if M2M_flag == False: # M2M not a field in pg sql table. will be handled in the junction table which can only be populated after all tables populated
+            values += ("", )
+
+            PGField = formatName.changeName(field, True)
+            # print(f'PGField = {PGField}')
+            PGCols.append(PGField)
+
+
+
+
     # print(f'PGCols = {PGCols}')
     # print(f'values = {values}')
     

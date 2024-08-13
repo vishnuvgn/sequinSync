@@ -261,19 +261,7 @@ def populateJunctionTable(table1, table2, table1Id, table2Ids):
     table1_pk = formatName.createPrimaryKey(table1)
     table2_pk = formatName.createPrimaryKey(table2)
 
-    skillCountPG = countRows(junction_table_name, table1_pk, table1Id)
-    skillCountAT = len(table2Ids)
-
-    if skillCountPG == skillCountAT:
-        print("no skills added or removed")
-        conn.commit()
-        cur.close()
-        conn.close()
-        return
-
-    # skill(s) removed
-    elif skillCountPG > skillCountAT:
-        deleteRows(junction_table_name, table1_pk, table1Id)
+    deleteRows(junction_table_name, table1_pk, table1Id)
 
     
     for table2Id in table2Ids:
@@ -388,30 +376,39 @@ def deleteTables():
         return "aborted"
 
 def clearTables():
-
-    tbls = list(PG_TABLE_FIELDS.keys())
-    for tbl in tbls:
-        clearTable(tbl)
+    print(f'DB: {PG_DATABASE}')
+    validation = input("Are you sure this is the database you want to clear (Y/n): ")
+    if validation == "y" or validation == "Y":
+        tbls = list(PG_TABLE_FIELDS.keys())
+        for tbl in tbls:
+            clearTable(tbl)
+    else:
+        return "aborted"
 
 def restart():
-    deleteTables()
-    createTables()
-
-if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print("Usage: python3 script.py <function_name> [<args>...]")
-        sys.exit(1)
-
-    function_name = sys.argv[1]
-    function_args = sys.argv[2:]
-
-    if function_name in globals():
-        func = globals()[function_name]
-        # Check if the function requires arguments
-        if func.__code__.co_argcount > 0:
-            func(*function_args)  # Unpack arguments as separate positional arguments
-        else:
-            func()  # Call function without arguments
+    print(f'DB: {PG_DATABASE}')
+    validation = input("Are you sure this is the database you want to clear (Y/n): ")
+    if validation == "y" or validation == "Y":
+        deleteTables()
+        createTables()
     else:
-        print(f"Function {function_name} not found in script.")
-        sys.exit(1)
+        return "aborted"
+
+# if __name__ == '__main__':
+#     if len(sys.argv) < 2:
+#         print("Usage: python3 script.py <function_name> [<args>...]")
+#         sys.exit(1)
+
+#     function_name = sys.argv[1]
+#     function_args = sys.argv[2:]
+
+#     if function_name in globals():
+#         func = globals()[function_name]
+#         # Check if the function requires arguments
+#         if func.__code__.co_argcount > 0:
+#             func(*function_args)  # Unpack arguments as separate positional arguments
+#         else:
+#             func()  # Call function without arguments
+#     else:
+#         print(f"Function {function_name} not found in script.")
+#         sys.exit(1)

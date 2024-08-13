@@ -41,7 +41,7 @@ def createSync(stream_id):
         "provider" : "airtable",
         "stream_id": stream_id,
         "name": "Airtable Sync",
-        "collection_ids": ['airtable:gcSyR6LfxbXo7iART4m1vcLu', 'airtable:eujMtBaNfSAsMvI2kF7F2nSi', 'airtable:NpJbSblRDdKgJosRbZSBCtve', 'airtable:NkmWXvTPqbybAkcE4IGm0dn6', 'airtable:G4imjysVDOOH5ofUbCWwXryx', 'airtable:f4eki9HRwU2imQWdDnFJV7rS', 'airtable:3X4IbiTRF9f03YjZakTicWEV', 'airtable:dVa6dpvaGo9saVuXuN3hrjxJ', 'airtable:Zj1i1yilXiqXjgJfTOtq3BdD', 'airtable:uG2YwEsUrEFVKk5KC4VnN8gh', 'airtable:eHqBtzxb7xC1pYcfrcZf3j1G', 'airtable:2szPY7DQDWxpueAyU4JT8OWQ', 'airtable:QRjRBK74dypRkjVNxSMSac29', 'airtable:NiSyJM9Od17YXRObYJwlzWr2', 'airtable:6su7Wmk9nQYYgiYtDZ82LXgi', 'airtable:EbxuQyg8nltoV4AaWf4ZzoFY', 'airtable:s9lQTLDSVZeTxaLOD5KU8jAP', 'airtable:GdI0mjcwUsdjxg49DBPU5yih', 'airtable:K71pCFJE5gmXYnNf81eBCJKa'],
+        "collection_ids": ['airtable:gcSyR6LfxbXo7iART4m1vcLu', 'airtable:eujMtBaNfSAsMvI2kF7F2nSi', 'airtable:NiSyJM9Od17YXRObYJwlzWr2', 'airtable:2szPY7DQDWxpueAyU4JT8OWQ', 'airtable:NpJbSblRDdKgJosRbZSBCtve', 'airtable:dVa6dpvaGo9saVuXuN3hrjxJ', 'airtable:3X4IbiTRF9f03YjZakTicWEV', 'airtable:uG2YwEsUrEFVKk5KC4VnN8gh', 'airtable:G4imjysVDOOH5ofUbCWwXryx', 'airtable:eHqBtzxb7xC1pYcfrcZf3j1G', 'airtable:QRjRBK74dypRkjVNxSMSac29', 'airtable:6su7Wmk9nQYYgiYtDZ82LXgi', 'airtable:f4eki9HRwU2imQWdDnFJV7rS', 'airtable:NkmWXvTPqbybAkcE4IGm0dn6', 'airtable:Zj1i1yilXiqXjgJfTOtq3BdD', 'airtable:K71pCFJE5gmXYnNf81eBCJKa', 'airtable:EbxuQyg8nltoV4AaWf4ZzoFY', 'airtable:s9lQTLDSVZeTxaLOD5KU8jAP'],
         "credential_id" : "0d5cf3d1-12a1-4795-a235-4e60c561493b",
         "max_age_days" : 7
     }   
@@ -86,7 +86,7 @@ def getTableIds():
     tables = collections['data']
     tblIds = [tbl['id'] for tbl in tables if tbl['name'] in ats]
     
-    print(tblIds)
+    return tblIds
 
 
 
@@ -150,23 +150,22 @@ def createStream():
     headers = {"Authorization" : f"Bearer {SEQUIN_API_KEY}", "Content-Type": "application/json"}
     payload = {"slug":"airtable-stream"}
     response = requests.request("POST", url, headers=headers, json=payload)
-    stream_id = response.json()['data']['id']
-    return stream_id
+    return response.text
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python3 apiCalls.py <function_name> [arguments...]")
-        sys.exit(1)
+# if __name__ == "__main__":
+#     if len(sys.argv) < 2:
+#         print("Usage: python3 apiCalls.py <function_name> [arguments...]")
+#         sys.exit(1)
 
-    function_name = sys.argv[1]
-    arguments = sys.argv[2:]
+#     function_name = sys.argv[1]
+#     arguments = sys.argv[2:]
 
-    if function_name == "listStreams":
-        listStreams()
-    elif function_name == "listConsumers":
-        listConsumers()
-    elif function_name == "resetConsumer":
-        resetConsumer(*arguments)
-    elif function_name == "listSyncs":
-        listSyncs(*arguments)
+#     if function_name == "listStreams":
+#         listStreams()
+#     elif function_name == "listConsumers":
+#         listConsumers()
+#     elif function_name == "resetConsumer":
+#         resetConsumer(*arguments)
+#     elif function_name == "listSyncs":
+#         listSyncs(*arguments)
